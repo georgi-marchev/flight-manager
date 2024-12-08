@@ -1,3 +1,28 @@
+spring:
+  application:
+    name: flight-manager
+  datasource:
+    url: jdbc:h2:mem:flight_manager
+    # This URL configures the H2 database to remain open as long as the JVM is running, stay open after JVM shutdown,
+    # automatically reconnect on connection loss, and operate in PostgreSQL compatibility mode.
+#    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;
+    username: admin
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      # access h2 console at http://localhost:${server.port}/${server.servlet.context-path}/h2-console/
+      # (same port and path as the application, i.e. http://localhost:8080/api/h2-console/ )
+      path: /h2-console
+      settings:
+        # prevent trace output
+        trace: false
+        # disable remote access
+        web-allow-others: false
+
 server:
   port: 8080
   servlet:
