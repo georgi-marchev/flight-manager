@@ -23,7 +23,7 @@ public class RoleService {
 
 	private Optional<Role> getRole(RoleType roleType) {
 
-		return roleRepository.findByName(roleType.name());
+		return roleRepository.findByName(roleType);
 	}
 
 	public Optional<Role> getEmployeeRole() {
@@ -39,7 +39,7 @@ public class RoleService {
 	private Role createRole(RoleType roleType) {
 
 		Role role = Role.builder()
-				.name(roleType.name())
+				.name(roleType)
 				.build();
 
 		roleRepository.save(role);
