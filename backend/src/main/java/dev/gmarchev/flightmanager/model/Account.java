@@ -31,7 +31,7 @@ public class Account {
 	private Long id;
 
 	@Column(nullable = false, unique = true)
-	private String userName;
+	private String username;
 
 	@Column(nullable = false)
 	private String password;
@@ -50,7 +50,7 @@ public class Account {
 
 	private String phoneNumber;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "account_roles",
 			joinColumns = @JoinColumn(name = "account_id"),
@@ -63,13 +63,13 @@ public class Account {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Account account = (Account) o;
-		return Objects.equals(userName, account.userName);
+		return Objects.equals(username, account.username);
 	}
 
 	@Override
 	public int hashCode() {
 
-		return Objects.hashCode(userName);
+		return Objects.hashCode(username);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class Account {
 
 		return "Account{" +
 				"id=" + id +
-				", userName='" + userName + '\'' +
+				", username='" + username + '\'' +
 				", email='" + email + '\'' +
 				", firstName='" + firstName + '\'' +
 				", lastName='" + lastName + '\'' +

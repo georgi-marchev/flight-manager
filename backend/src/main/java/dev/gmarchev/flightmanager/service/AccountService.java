@@ -47,7 +47,7 @@ public class AccountService {
 	private Account createAccount(AccountRequest accountRequest, Role role) {
 
 		Account account = Account.builder()
-				.userName(accountRequest.getUserName())
+				.username(accountRequest.getUserName())
 				.password(passwordEncoder.encode(accountRequest.getPassword()))
 				.email(accountRequest.getEmail())
 				.firstName(accountRequest.getFirstName())
