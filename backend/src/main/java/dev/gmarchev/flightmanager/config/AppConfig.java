@@ -3,6 +3,7 @@ package dev.gmarchev.flightmanager.config;
 import dev.gmarchev.flightmanager.security.JwtAuthenticationFilter;
 import dev.gmarchev.flightmanager.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableConfigurationProperties({ AccountMapping.class })
 public class AppConfig {
 
 	private final AuthenticationService authenticationService;
@@ -65,7 +67,7 @@ public class AppConfig {
 				.authorizeHttpRequests(auth -> {
 					auth.requestMatchers("/h2-console/**").permitAll();
 //					auth.requestMatchers("/test/**").hasRole("ADMIN");
-					auth.requestMatchers("/account/create-employee", "/account/create-employee/").hasRole("ADMIN");
+					auth.requestMatchers("/employee-accounts/**").hasRole("ADMIN");
 					auth.requestMatchers(
 							"/auth/login", "/auth/login/", "/auth/refresh-token", "/auth/refresh-token/")
 							.permitAll();

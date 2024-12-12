@@ -1,5 +1,6 @@
 package dev.gmarchev.flightmanager.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import dev.gmarchev.flightmanager.model.Role;
@@ -16,41 +17,19 @@ public class RoleService {
 
 	private final RoleRepository roleRepository;
 
-	public Optional<Role> getAdminRole() {
-
-		return getRole(RoleType.ADMIN);
-	}
-
-	private Optional<Role> getRole(RoleType roleType) {
+	public Optional<Role> getRole(RoleType roleType) {
 
 		return roleRepository.findByName(roleType);
 	}
 
-	public Optional<Role> getEmployeeRole() {
+	public void createRoles(List<RoleType> roleTypes) {
 
-		return getRole(RoleType.EMPLOYEE);
-	}
+		List<Role> roles = roleTypes.stream()
+				.map(r -> Role.builder().name(r).build())
+				.toList();
 
-	public Role createAdminRole() {
+		roleRepository.saveAll(roles);
 
-		return createRole(RoleType.ADMIN);
-	}
-
-	private Role createRole(RoleType roleType) {
-
-		Role role = Role.builder()
-				.name(roleType)
-				.build();
-
-		roleRepository.save(role);
-
-		log.info("Role created: {}", role);
-
-		return role;
-	}
-
-	public Role createEmployeeRole() {
-
-		return createRole(RoleType.EMPLOYEE);
+		log.info("Roles created: {}", roles);
 	}
 }

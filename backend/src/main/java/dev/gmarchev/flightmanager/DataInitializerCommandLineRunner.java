@@ -1,8 +1,13 @@
 package dev.gmarchev.flightmanager;
 
-import dev.gmarchev.flightmanager.model.Role;
+import java.util.ArrayList;
+import java.util.List;
+
+import dev.gmarchev.flightmanager.config.AccountMapping;
+import dev.gmarchev.flightmanager.model.RoleType;
 import dev.gmarchev.flightmanager.service.AccountService;
 import dev.gmarchev.flightmanager.service.RoleService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -17,20 +22,44 @@ public class DataInitializerCommandLineRunner implements CommandLineRunner {
 
 	private final AccountService accountService;
 
+	private final AccountMapping accountMapping;
+
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
 
 		log.info("Running data initialization sequence...");
 
-		Role administratorRole = roleService.getAdminRole()
-				.orElseGet(roleService::createAdminRole);
+		createMissingRoles();
 
-		roleService.getEmployeeRole()
-				.orElseGet(roleService::createEmployeeRole);
-
-		accountService.getDefaultAdminAccount(administratorRole)
-				.orElseGet(() -> accountService.createDefaultAdminAccount(administratorRole));
+		createMissingAdminAccount();
 
 		log.info("Data initialization completed.");
+	}
+
+	public void createMissingRoles() {
+
+		List<RoleType> rolesToCreate = new ArrayList<>();
+
+		for (RoleType roleType : RoleType.values()) {
+
+			if (!roleService.getRole(roleType).isPresent()) {
+
+				rolesToCreate.add(roleType);
+			}
+		}
+
+		if (!rolesToCreate.isEmpty()) {
+
+			roleService.createRoles(rolesToCreate);
+		}
+	}
+
+	public void createMissingAdminAccount() {
+
+		if (!accountService.accountForRoleExists(RoleType.ADMIN)) {
+
+			accountService.createAccount(accountMapping.admin(), RoleType.ADMIN);
+		}
 	}
 }

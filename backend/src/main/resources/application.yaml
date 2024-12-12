@@ -37,7 +37,7 @@ server:
     context-path: /api
 
 jwt:
-  secret:
+  secret: "PpKFjf1jJVJL8Qy0FeSuPMO8UC+ILrIJBa7HWgJsLx8="
   access:
     # 1 hour
     duration-seconds: 3600
@@ -50,3 +50,14 @@ logging:
   level:
     org:
       springframework: DEBUG
+
+accounts:
+  admin:
+    username: admin
+    password: 1234
+    email: admin@fake.com
+    first-name: John
+    last-name: Doe
+    personal-identification-number: 111111111
+    address: 5861 Arctic Blvd, Anchorage, Alaska 99518
+    phone-number: 123456789
