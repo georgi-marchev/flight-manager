@@ -112,7 +112,6 @@ public class AccountService {
 						.lastName(a.getLastName())
 						.build())
 				.collect(Collectors.toUnmodifiableList());
-		page.hasNext();
 
 		return new PageResponse<>(accounts, page.hasNext());
 	}

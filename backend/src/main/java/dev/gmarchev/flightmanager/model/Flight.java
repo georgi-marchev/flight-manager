@@ -9,11 +9,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
@@ -21,11 +23,23 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
+@ToString
 public class Flight {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Version
+	private Long version;
+
+	private ZonedDateTime departureTime;
+
+	private ZonedDateTime arrivalTime;
+
+	private int availableSeatsEconomy;
+
+	private int availableSeatsBusiness;
 
 	@ManyToOne
 	@JoinColumn(name = "flightdeparture_location_id", referencedColumnName = "id")
@@ -34,10 +48,6 @@ public class Flight {
 	@ManyToOne
 	@JoinColumn(name = "flight_destination_location_id", referencedColumnName = "id")
 	private Location flightDestinationLocation;
-
-	private ZonedDateTime departureTime;
-
-	private ZonedDateTime arrivalTime;
 
 	@ManyToOne
 	@JoinColumn(name = "flight_airplane_id", referencedColumnName = "id")

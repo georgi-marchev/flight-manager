@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,8 +25,9 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+@EnableRetry
 @EnableConfigurationProperties({ AccountMapping.class })
+@RequiredArgsConstructor
 public class AppConfig {
 
 	private final AuthenticationService authenticationService;
@@ -67,12 +70,14 @@ public class AppConfig {
 				.authorizeHttpRequests(auth -> {
 					auth.requestMatchers("/h2-console/**").permitAll();
 //					auth.requestMatchers("/test/**").hasRole("ADMIN");
-					auth.requestMatchers("/employee-accounts/**").hasRole("ADMIN");
 					auth.requestMatchers(
 							"/auth/login", "/auth/login/", "/auth/refresh-token", "/auth/refresh-token/")
 							.permitAll();
+					auth.requestMatchers("/employee-accounts/**").hasRole("ADMIN");
+					auth.requestMatchers(HttpMethod.POST, "/flights").hasRole("ADMIN");
+					auth.requestMatchers("/flights").permitAll();
 					auth.anyRequest().authenticated();
-//					auth.anyRequest().permitAll();
+					//					auth.anyRequest().permitAll();
 				})
 				.headers(headers -> headers.frameOptions().disable()) // Disable X-Frame-Options header for H2 console )
 				.csrf(AbstractHttpConfigurer::disable)

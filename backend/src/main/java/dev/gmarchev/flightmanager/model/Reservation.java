@@ -1,13 +1,15 @@
 package dev.gmarchev.flightmanager.model;
 
-import jakarta.persistence.Column;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,22 +18,25 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
 @Setter
 @ToString
-public class Airplane {
+public class Reservation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(unique = true)
-	private String serialNumber;
+	private String contactEmail;
 
 	@ManyToOne
-	@JoinColumn(name = "airplane_airplane_model_id", referencedColumnName = "id")
-	private AirplaneModel airplaneAirplaneModel;
+	@JoinColumn(name = "reservation_flight_id", referencedColumnName = "id")
+	private Flight reservationFlight;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "reservation_id", referencedColumnName = "id")
+	private List<Passenger> passengers;
 }

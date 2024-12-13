@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
+@ToString
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"airportName", "city", "country"})
 })
 public class Location {

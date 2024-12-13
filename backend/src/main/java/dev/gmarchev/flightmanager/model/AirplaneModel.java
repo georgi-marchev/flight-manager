@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
+@ToString
 public class AirplaneModel {
 
 	@Id
