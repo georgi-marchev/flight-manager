@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import dev.gmarchev.flightmanager.dto.PageResponse;
-import dev.gmarchev.flightmanager.dto.PassengerDto;
+import dev.gmarchev.flightmanager.dto.ReservationRequestPassenger;
 import dev.gmarchev.flightmanager.dto.ReservationPageItem;
 import dev.gmarchev.flightmanager.dto.ReservationPassengerResponse;
 import dev.gmarchev.flightmanager.dto.ReservationRequest;
@@ -49,6 +49,7 @@ public class ReservationService {
 				predicate = criteriaBuilder.and(
 						predicate,
 						criteriaBuilder.like(
+								// TODO: Replace strings with constants, which should be added to the model.
 								criteriaBuilder.lower(reservation.get("contactEmail")),
 								"%" + contactEmail.get().toLowerCase() + "%"));
 			}
@@ -84,9 +85,9 @@ public class ReservationService {
 
 		List<Passenger> passengers = new ArrayList<>();
 
-		for (PassengerDto passengerDto : reservationRequest.getPassengers()) {
+		for (ReservationRequestPassenger reservationRequestPassenger : reservationRequest.getPassengers()) {
 
-			SeatType seatType = passengerDto.getSeatType();
+			SeatType seatType = reservationRequestPassenger.getSeatType();
 
 			if (seatType.equals(SeatType.ECONOMY)) {
 
@@ -103,13 +104,13 @@ public class ReservationService {
 
 			passengers.add(
 					Passenger.builder()
-							.firstName(passengerDto.getFirstName())
-							.middleName(passengerDto.getMiddleName())
-							.lastName(passengerDto.getLastName())
-							.personalIdentificationNumber(passengerDto.getPersonalIdentificationNumber())
-							.phoneNumber(passengerDto.getPhoneNumber())
-							.nationality(passengerDto.getNationality())
-							.seatType(passengerDto.getSeatType())
+							.firstName(reservationRequestPassenger.getFirstName())
+							.middleName(reservationRequestPassenger.getMiddleName())
+							.lastName(reservationRequestPassenger.getLastName())
+							.personalIdentificationNumber(reservationRequestPassenger.getPersonalIdentificationNumber())
+							.phoneNumber(reservationRequestPassenger.getPhoneNumber())
+							.nationality(reservationRequestPassenger.getNationality())
+							.seatType(reservationRequestPassenger.getSeatType())
 							.build());
 		}
 
@@ -118,7 +119,6 @@ public class ReservationService {
 
 		if (availableSeatsEconomy < economySeatsToBook || availableSeatsBusiness < businessSeatsToBook) {
 
-			// TODO
 			throw new InsufficientSeatsException();
 		}
 

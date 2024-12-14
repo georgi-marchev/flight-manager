@@ -2,6 +2,8 @@ package dev.gmarchev.flightmanager.dto;
 
 import java.time.ZonedDateTime;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,17 +15,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FlightRequest {
+public class FlightCreateRequest {
 
+	@NotNull
 	private ZonedDateTime departureTime;
 
+	@NotNull
 	private ZonedDateTime arrivalTime;
 
-	private Long flightDepartureLocation;
+	@Min(1)
+	private long flightDepartureLocation;
 
-	private Long flightDestinationLocation;
+	@Min(1)
+	private long flightDestinationLocation;
 
-	private Long flightAirplane;
+	@Min(1)
+	private long flightAirplane;
 
-	private Long flightPilot;
+	@Min(1)
+	private long flightPilot;
 }

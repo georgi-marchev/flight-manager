@@ -1,7 +1,8 @@
 package dev.gmarchev.flightmanager.controller;
 
-import dev.gmarchev.flightmanager.dto.FlightRequest;
+import dev.gmarchev.flightmanager.dto.FlightCreateRequest;
 import dev.gmarchev.flightmanager.service.FlightService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,17 @@ public class FlightController {
 	private final FlightService flightService;
 
 	@PostMapping
-	public ResponseEntity<String> create(@RequestBody FlightRequest flightRequest) {
+	public ResponseEntity<String> create(@RequestBody @Valid FlightCreateRequest flightCreateRequest) {
 
-		flightService.createFlight(flightRequest);
+		try	{
+
+			flightService.createFlight(flightCreateRequest);
+
+		} catch (IllegalArgumentException e) {
+
+			return ResponseEntity.status(HttpStatus.CONFLICT)
+					.body(e.getMessage());
+		}
 
 		return ResponseEntity
 				.status(HttpStatus.CREATED)

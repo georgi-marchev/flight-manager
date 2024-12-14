@@ -2,9 +2,11 @@ package dev.gmarchev.flightmanager.controller;
 
 import java.util.Optional;
 
+import dev.gmarchev.flightmanager.dto.AccountPageItem;
 import dev.gmarchev.flightmanager.dto.PageResponse;
-import dev.gmarchev.flightmanager.dto.AccountRequest;
+import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
 import dev.gmarchev.flightmanager.service.AccountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,9 +27,9 @@ public class AccountController {
 	private final AccountService accountService;
 
 	@PostMapping
-	public ResponseEntity<String> create(@RequestBody AccountRequest accountRequest) {
+	public ResponseEntity<String> create(@RequestBody @Valid AccountCreateRequest accountCreateRequest) {
 
-		accountService.createEmployeeAccount(accountRequest);
+		accountService.createEmployeeAccount(accountCreateRequest);
 
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
@@ -35,7 +37,7 @@ public class AccountController {
 	}
 
 	@GetMapping
-	public ResponseEntity<PageResponse> getAccounts(
+	public ResponseEntity<PageResponse<AccountPageItem>> getAccounts(
 			@RequestParam(required = false) String username,
 			@RequestParam(required = false) String email,
 			@RequestParam(required = false) String firstName,

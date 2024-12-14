@@ -3,6 +3,7 @@ package dev.gmarchev.flightmanager.controller;
 import dev.gmarchev.flightmanager.dto.AuthenticationRequest;
 import dev.gmarchev.flightmanager.dto.AuthenticationResponse;
 import dev.gmarchev.flightmanager.security.JwtService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class AuthenticationController {
 	private final JwtService jwtService;
 
 	@PostMapping({"/login", "/login/"})
-	public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) {
+	public ResponseEntity<?> login(@RequestBody @Valid AuthenticationRequest authenticationRequest) {
 
 		String username = authenticationRequest.getUsername();
 
@@ -72,12 +73,8 @@ public class AuthenticationController {
 
 		String username = jwtService.extractUsername(refreshToken);
 
-		// TODO: Add refresh tokens to database and check if it is present and is not blacklisted. Blacklist old
-		// refresh token if new one is issued.
-		// refreshTokenService.getStoredRefreshToken(username);
-		// storedToken.isBlackListed()
-		// refreshTOkenService.blackList(refreshToken)
-
+		// TODO: Improve by adding refresh tokens to the database and check if it is present and is not blacklisted.
+		//  Blacklist old refresh token if new one is issued.
 		return ResponseEntity.ok(new AuthenticationResponse(
 				jwtService.generateAccessToken(username), jwtService.generateRefreshToken(username)));
 	}

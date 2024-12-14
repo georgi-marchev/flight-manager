@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import dev.gmarchev.flightmanager.dto.AccountPageItem;
 import dev.gmarchev.flightmanager.dto.PageResponse;
-import dev.gmarchev.flightmanager.dto.AccountRequest;
+import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
 import dev.gmarchev.flightmanager.model.Account;
 import dev.gmarchev.flightmanager.model.Role;
 import dev.gmarchev.flightmanager.model.RoleType;
@@ -40,20 +40,20 @@ public class AccountService {
 		return accountRepository.findFirstByRolesName(roleType).isPresent();
 	}
 
-	public Account createAccount(AccountRequest accountRequest, RoleType roleType) {
+	public Account createAccount(AccountCreateRequest accountCreateRequest, RoleType roleType) {
 
 		Role role = roleRepository.findByName(roleType)
 				.orElseThrow(() -> new IllegalStateException(String.format("Role %s is missing")));
 
 		Account account = Account.builder()
-				.username(accountRequest.getUserName())
-				.password(passwordEncoder.encode(accountRequest.getPassword()))
-				.email(accountRequest.getEmail())
-				.firstName(accountRequest.getFirstName())
-				.lastName(accountRequest.getLastName())
-				.personalIdentificationNumber(accountRequest.getPersonalIdentificationNumber())
-				.address(accountRequest.getAddress())
-				.phoneNumber(accountRequest.getPhoneNumber())
+				.username(accountCreateRequest.getUsername())
+				.password(passwordEncoder.encode(accountCreateRequest.getPassword()))
+				.email(accountCreateRequest.getEmail())
+				.firstName(accountCreateRequest.getFirstName())
+				.lastName(accountCreateRequest.getLastName())
+				.personalIdentificationNumber(accountCreateRequest.getPersonalIdentificationNumber())
+				.address(accountCreateRequest.getAddress())
+				.phoneNumber(accountCreateRequest.getPhoneNumber())
 				.roles(Set.of(role))
 				.build();
 
@@ -64,9 +64,9 @@ public class AccountService {
 		return account;
 	}
 
-	public void createEmployeeAccount(AccountRequest accountRequest) {
+	public void createEmployeeAccount(AccountCreateRequest accountCreateRequest) {
 
-		createAccount(accountRequest, RoleType.EMPLOYEE);
+		createAccount(accountCreateRequest, RoleType.EMPLOYEE);
 	}
 
 	public PageResponse<AccountPageItem> getEmployeeAccounts(
@@ -79,7 +79,7 @@ public class AccountService {
 		// Creating dynamic Specification for Account
 		Specification<Account> spec = (account, query, criteriaBuilder) -> {
 
-			// TODO: Replace strings with constants.
+			// TODO: Replace strings with constants, which should be added to the model.
 			Predicate predicate = criteriaBuilder.equal(account.join("roles").get("name"), RoleType.EMPLOYEE.name());
 
 			Map<String, Optional<String>> filters = Map.of(

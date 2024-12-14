@@ -2,6 +2,7 @@ package dev.gmarchev.flightmanager.config;
 
 import dev.gmarchev.flightmanager.security.JwtAuthenticationFilter;
 import dev.gmarchev.flightmanager.service.AuthenticationService;
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -68,8 +69,8 @@ public class AppConfig {
 
 		return http
 				.authorizeHttpRequests(auth -> {
+					auth.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll();
 					auth.requestMatchers("/h2-console/**").permitAll();
-//					auth.requestMatchers("/test/**").hasRole("ADMIN");
 					auth.requestMatchers(
 							"/auth/login", "/auth/login/", "/auth/refresh-token", "/auth/refresh-token/")
 							.permitAll();
@@ -77,7 +78,7 @@ public class AppConfig {
 					auth.requestMatchers(HttpMethod.POST, "/flights").hasRole("ADMIN");
 					auth.requestMatchers("/flights").permitAll();
 					auth.anyRequest().authenticated();
-					//					auth.anyRequest().permitAll();
+//					auth.anyRequest().permitAll();
 				})
 				.headers(headers -> headers.frameOptions().disable()) // Disable X-Frame-Options header for H2 console )
 				.csrf(AbstractHttpConfigurer::disable)
