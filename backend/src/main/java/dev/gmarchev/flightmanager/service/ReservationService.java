@@ -17,13 +17,12 @@ import dev.gmarchev.flightmanager.model.Reservation;
 import dev.gmarchev.flightmanager.model.SeatType;
 import dev.gmarchev.flightmanager.repository.FlightRepository;
 import dev.gmarchev.flightmanager.repository.ReservationRepository;
-import jakarta.persistence.criteria.Predicate;
+import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -36,28 +35,11 @@ public class ReservationService {
 
 	private final ReservationRepository reservationRepository;
 
-	public PageResponse<ReservationPageItem> getReservations(Optional<String> contactEmail, int pageNumber, int pageSize) {
+	public PageResponse<ReservationPageItem> getReservations(
+			@Nullable String contactEmail, int pageNumber, int pageSize) {
 
-		// Creating dynamic Specification for Account
-		Specification<Reservation> spec = (reservation, query, criteriaBuilder) -> {
-
-			// Start with true predicate
-			Predicate predicate = criteriaBuilder.conjunction();
-
-			if (contactEmail.isPresent()) {
-
-				predicate = criteriaBuilder.and(
-						predicate,
-						criteriaBuilder.like(
-								// TODO: Replace strings with constants, which should be added to the model.
-								criteriaBuilder.lower(reservation.get("contactEmail")),
-								"%" + contactEmail.get().toLowerCase() + "%"));
-			}
-
-			return predicate;
-		};
-
-		Page<Reservation> page = reservationRepository.findAll(spec, PageRequest.of(pageNumber, pageSize));
+		Page<Reservation> page = reservationRepository.findReservationByOptionalFilters(
+				contactEmail, PageRequest.of(pageNumber, pageSize));
 
 		List<ReservationPageItem> reservations = page.get()
 				.map(r -> new ReservationPageItem(

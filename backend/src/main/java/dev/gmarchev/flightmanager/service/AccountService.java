@@ -1,9 +1,6 @@
 package dev.gmarchev.flightmanager.service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,12 +12,11 @@ import dev.gmarchev.flightmanager.model.Role;
 import dev.gmarchev.flightmanager.model.RoleType;
 import dev.gmarchev.flightmanager.repository.AccountRepository;
 import dev.gmarchev.flightmanager.repository.RoleRepository;
-import jakarta.persistence.criteria.Predicate;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -70,39 +66,15 @@ public class AccountService {
 	}
 
 	public PageResponse<AccountPageItem> getEmployeeAccounts(
-			Optional<String> username,
-			Optional<String> email,
-			Optional<String> firstName,
-			Optional<String> lastName,
+			@Nullable String username,
+			@Nullable String email,
+			@Nullable String firstName,
+			@Nullable String lastName,
 			int pageNumber,
 			int pageSize) {
-		// Creating dynamic Specification for Account
-		Specification<Account> spec = (account, query, criteriaBuilder) -> {
 
-			// TODO: Replace strings with constants, which should be added to the model.
-			Predicate predicate = criteriaBuilder.equal(account.join("roles").get("name"), RoleType.EMPLOYEE.name());
-
-			Map<String, Optional<String>> filters = Map.of(
-					"username", username, "email", email, "firstName", firstName, "lastName", lastName);
-
-			for (Entry<String, Optional<String>> keyToVal : filters.entrySet()) {
-
-				Optional<String> value = keyToVal.getValue();
-
-				if (value.isPresent()) {
-
-					predicate = criteriaBuilder.and(
-							predicate,
-							criteriaBuilder.like(
-									criteriaBuilder.lower(account.get(keyToVal.getKey())),
-									"%" + value.get().toLowerCase() + "%"));
-				}
-			}
-
-			return predicate;
-		};
-
-		Page<Account> page = accountRepository.findAll(spec, PageRequest.of(pageNumber, pageSize));
+		Page<Account> page = accountRepository.findReservationByOptionalFilters(
+				username, email, firstName, lastName, RoleType.EMPLOYEE, PageRequest.of(pageNumber, pageSize));
 
 		List<AccountPageItem> accounts = page.get()
 				.map(a -> AccountPageItem.builder()

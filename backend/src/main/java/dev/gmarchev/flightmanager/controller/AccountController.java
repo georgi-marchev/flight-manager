@@ -1,11 +1,10 @@
 package dev.gmarchev.flightmanager.controller;
 
-import java.util.Optional;
-
 import dev.gmarchev.flightmanager.dto.AccountPageItem;
 import dev.gmarchev.flightmanager.dto.PageResponse;
 import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
 import dev.gmarchev.flightmanager.service.AccountService;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,19 +37,13 @@ public class AccountController {
 
 	@GetMapping
 	public ResponseEntity<PageResponse<AccountPageItem>> getAccounts(
-			@RequestParam(required = false) String username,
-			@RequestParam(required = false) String email,
-			@RequestParam(required = false) String firstName,
-			@RequestParam(required = false) String lastName,
+			@RequestParam(required = false) @Nullable String username,
+			@RequestParam(required = false) @Nullable String email,
+			@RequestParam(required = false) @Nullable String firstName,
+			@RequestParam(required = false) @Nullable String lastName,
 			@RequestParam int page,
 			@RequestParam int size) {
 
-		return ResponseEntity.ok(accountService.getEmployeeAccounts(
-				Optional.ofNullable(username),
-				Optional.ofNullable(email),
-				Optional.ofNullable(firstName),
-				Optional.ofNullable(lastName),
-				page,
-				size));
+		return ResponseEntity.ok(accountService.getEmployeeAccounts(username, email, firstName, lastName, page, size));
 	}
 }

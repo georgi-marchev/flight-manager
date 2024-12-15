@@ -75,7 +75,9 @@ public class AppConfig {
 							"/auth/login", "/auth/login/", "/auth/refresh-token", "/auth/refresh-token/")
 							.permitAll();
 					auth.requestMatchers("/employee-accounts/**").hasRole("ADMIN");
+					auth.requestMatchers(HttpMethod.GET, "/flights").permitAll();
 					auth.requestMatchers(HttpMethod.POST, "/flights").hasRole("ADMIN");
+					auth.requestMatchers(HttpMethod.POST, "/flights/{id}/book").permitAll();
 					auth.requestMatchers("/flights").permitAll();
 					auth.anyRequest().authenticated();
 //					auth.anyRequest().permitAll();

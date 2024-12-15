@@ -1,13 +1,12 @@
 package dev.gmarchev.flightmanager.controller;
 
-import java.util.Optional;
-
 import dev.gmarchev.flightmanager.dto.PageResponse;
 import dev.gmarchev.flightmanager.dto.ReservationPageItem;
 import dev.gmarchev.flightmanager.dto.ReservationRequest;
 import dev.gmarchev.flightmanager.dto.ReservationResponse;
 import dev.gmarchev.flightmanager.exceptions.InsufficientSeatsException;
 import dev.gmarchev.flightmanager.service.ReservationService;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
@@ -29,15 +28,15 @@ public class ReservationController {
 
 	@GetMapping
 	public ResponseEntity<PageResponse<ReservationPageItem>> getResrevations(
-			@RequestParam(required = false) String contactEmail,
+			@RequestParam(required = false) @Nullable String contactEmail,
 			@RequestParam int page,
 			@RequestParam int size) {
 
-		return ResponseEntity.ok(reservationService.getReservations(Optional.ofNullable(contactEmail), page, size));
+		return ResponseEntity.ok(reservationService.getReservations(contactEmail, page, size));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ReservationResponse> getReservationById(@PathVariable Long id) {
+	public ResponseEntity<ReservationResponse> getReservationById(@PathVariable long id) {
 
 		return reservationService.findById(id)
 				.map(ResponseEntity::ok)
