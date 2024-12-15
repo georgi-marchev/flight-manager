@@ -71,6 +71,7 @@ public class AppConfig {
 				.authorizeHttpRequests(auth -> {
 					auth.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll();
 					auth.requestMatchers("/h2-console/**").permitAll();
+					auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll();
 					auth.requestMatchers(
 							"/auth/login", "/auth/login/", "/auth/refresh-token", "/auth/refresh-token/")
 							.permitAll();
@@ -80,6 +81,7 @@ public class AppConfig {
 					auth.requestMatchers(HttpMethod.POST, "/flights/{id}/book").permitAll();
 					auth.requestMatchers("/flights").permitAll();
 					auth.anyRequest().authenticated();
+					// TODO: Remove
 //					auth.anyRequest().permitAll();
 				})
 				.headers(headers -> headers.frameOptions().disable()) // Disable X-Frame-Options header for H2 console )
@@ -87,12 +89,6 @@ public class AppConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(STATELESS)) // disable serverside session for JWT auth
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.authenticationProvider(authenticationProvider)
-				// TODO
-//				.logout(logout ->
-//						logout.logoutUrl("/api/auth/logout")
-//								.addLogoutHandler(logoutHandler)
-//								.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-//				)
 				.build();
 	}
 }
