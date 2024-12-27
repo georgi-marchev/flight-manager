@@ -1,5 +1,7 @@
 package dev.gmarchev.flightmanager.config;
 
+import java.util.Arrays;
+
 import dev.gmarchev.flightmanager.security.JwtAuthenticationFilter;
 import dev.gmarchev.flightmanager.service.AuthenticationService;
 import jakarta.servlet.DispatcherType;
@@ -21,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -86,7 +89,16 @@ public class AppConfig {
 				})
 				.headers(headers -> headers.frameOptions().disable()) // Disable X-Frame-Options header for H2 console )
 				.csrf(AbstractHttpConfigurer::disable)
-				.sessionManagement(session -> session.sessionCreationPolicy(STATELESS)) // disable serverside session for JWT auth
+				// TODO: Configure properly for production
+				.cors(cors -> cors.configurationSource(request -> {
+					CorsConfiguration configuration = new CorsConfiguration();
+					configuration.setAllowedOrigins(Arrays.asList("*"));
+					configuration.setAllowedMethods(Arrays.asList("*"));
+					configuration.setAllowedHeaders(Arrays.asList("*"));
+					return configuration;
+				}))
+				.sessionManagement(
+						session -> session.sessionCreationPolicy(STATELESS)) // disable serverside session for JWT auth
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.authenticationProvider(authenticationProvider)
 				.build();
