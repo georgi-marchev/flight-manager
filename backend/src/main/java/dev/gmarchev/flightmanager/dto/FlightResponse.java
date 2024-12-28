@@ -11,7 +11,7 @@ public class FlightResponse {
 
 	private ZonedDateTime departureTime;
 
-	private String duration;
+	private ZonedDateTime arrivalTime;
 
 	private int availableSeatsEconomy;
 

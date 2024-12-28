@@ -131,35 +131,13 @@ public class FlightService {
 		Flight flight = flightRepository.findById(flightId)
 				.orElseThrow(() -> new IllegalArgumentException("Flight not found"));
 
-		String flightDuration = getFormattedDuration(flight.getArrivalTime(), flight.getDepartureTime());
-
 		return new FlightResponse(
 				flight.getDepartureTime(),
-				flightDuration,
+				flight.getArrivalTime(),
 				flight.getAvailableSeatsEconomy(),
 				flight.getAvailableSeatsBusiness(),
 				locationToString(flight.getFlightDepartureLocation()),
 				locationToString(flight.getFlightDestinationLocation()));
-	}
-
-	/**
-	 * Format in either "N minutes" if under 1 hour or "N hours M minutes" if over 1 hour
-	 */
-	private static String getFormattedDuration(ZonedDateTime start, ZonedDateTime end) {
-
-		Duration duration = Duration.between(start, end);
-
-		long hours = duration.toHours();
-		long minutes = duration.toMinutes() % 60;
-
-		if (hours == 0) {
-
-			return minutes + " minutes";
-
-		} else {
-
-			return hours + " hours " + minutes + " minutes";
-		}
 	}
 
 	public PageResponse<PassengerPageItem> getPassengersByFlightById(long flightId, int pageNumber, int pageSize) {
