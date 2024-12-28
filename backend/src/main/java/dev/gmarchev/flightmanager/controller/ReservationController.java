@@ -7,6 +7,7 @@ import dev.gmarchev.flightmanager.dto.ReservationResponse;
 import dev.gmarchev.flightmanager.exceptions.InsufficientSeatsException;
 import dev.gmarchev.flightmanager.service.ReservationService;
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class ReservationController {
 	}
 
 	@PostMapping
-	public ResponseEntity<String> makeReservation(@RequestBody ReservationRequest reservationRequest) {
+	public ResponseEntity<String> makeReservation(@RequestBody @Valid ReservationRequest reservationRequest) {
 
 		try {
 

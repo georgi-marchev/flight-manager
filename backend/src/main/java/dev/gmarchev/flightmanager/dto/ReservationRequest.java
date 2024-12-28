@@ -2,6 +2,7 @@ package dev.gmarchev.flightmanager.dto;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -24,6 +25,7 @@ public class ReservationRequest {
 	private String contactEmail;
 
 	@NotEmpty
+	@Valid
 	private List<ReservationRequestPassenger> passengers;
 }
 
