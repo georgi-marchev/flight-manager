@@ -3,10 +3,12 @@ import api from '../api/flightManager';
 import { formatDateTime } from '../utils/dateHelper';
 import { Alert, Col, Container, Form, Row, Table } from 'react-bootstrap';
 import Pagination from './Pagination';
+import { Link } from 'react-router-dom';
 
 const PAGE_SIZES = [1, 25, 50];
 
 interface Flight {
+    id: number;
     departureTime: string;
     arrivalTime: string;
     departureLocation: string;
@@ -169,6 +171,7 @@ const Flights = () => {
                                 <th>Пристигане</th>
                                 <th>От</th>
                                 <th>До</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -178,6 +181,7 @@ const Flights = () => {
                                 <td>{formatDateTime(flight.arrivalTime)}</td>
                                 <td>{flight.departureLocation}</td>
                                 <td>{flight.destinationLocation}</td>
+                                <td><Link className='link-primary' to={`flights/${flight.id}/create-reservation`}>Резервирай</Link></td>
                             </tr>
                             ))}
                         </tbody>

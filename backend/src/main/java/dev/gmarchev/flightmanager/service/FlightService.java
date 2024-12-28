@@ -112,6 +112,7 @@ public class FlightService {
 
 		List<FlightPageItem> flightPageItems = page.get()
 				.map(f -> new FlightPageItem(
+						f.getId(),
 						f.getDepartureTime(),
 						f.getArrivalTime(),
 						locationToString(f.getFlightDepartureLocation()),

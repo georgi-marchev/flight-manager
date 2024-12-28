@@ -9,6 +9,8 @@ import lombok.Getter;
 @Getter
 public class FlightPageItem {
 
+	private Long id;
+
 	private ZonedDateTime departureTime;
 
 	private ZonedDateTime arrivalTime;
