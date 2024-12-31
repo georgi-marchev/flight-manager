@@ -133,6 +133,7 @@ const Flights = () => {
                                     name="availableSeatsEconomy"
                                     value={filters.availableSeatsEconomy}
                                     onChange={handleFilterChange}
+                                    min={1}
                                 />
                             </Form.Group>
 
@@ -144,6 +145,7 @@ const Flights = () => {
                                     name="availableSeatsBusiness"
                                     value={filters.availableSeatsBusiness}
                                     onChange={handleFilterChange}
+                                    min={1}
                                 />
                             </Form.Group>
 
