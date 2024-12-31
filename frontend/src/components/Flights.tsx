@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../api/flightManager';
+import { apiClient } from '../api/apiClient';
 import { formatDateTime } from '../utils/dateHelper';
 import { Alert, Col, Container, Form, Row, Table } from 'react-bootstrap';
 import Pagination from './Pagination';
@@ -35,7 +35,7 @@ const Flights = () => {
         const fetchFlights = async () => {
             
             try {
-                const response = await api.get('/flights', {
+                const response = await apiClient.get('/flights', {
                     params: {
                         ...filters,
                         page: page,
@@ -55,17 +55,17 @@ const Flights = () => {
         };
 
         fetchFlights();
-    }, [page, size, filters]); // The request re-runs when `page`, `size`, or `filters` change
+    }, [page, size, filters]);
 
     const handleNextPage = () => {
         if (hasNext) {
-            setPage(page + 1); // Move to the next page if there is a next page
+            setPage(page + 1);
         }
     };
 
     const handlePreviousPage = () => {
         if (page > 0) {
-            setPage(page - 1); // Decrement page if there is a previous page
+            setPage(page - 1);
         }
     };
 

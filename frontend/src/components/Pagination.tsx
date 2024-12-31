@@ -2,10 +2,10 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 
 interface PaginationProps {
     handlePreviousPage: () => void;
-    handleNextPage: () => void; // Explicitly define the type as boolean
+    handleNextPage: () => void;
     pageNum: number;
     hasNext: boolean;
-  }
+}
 
 const Pagination: React.FC<PaginationProps> = ({ handlePreviousPage, handleNextPage, pageNum, hasNext }) => {
     return (
