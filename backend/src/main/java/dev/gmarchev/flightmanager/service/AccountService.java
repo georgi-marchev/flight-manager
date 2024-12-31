@@ -78,6 +78,7 @@ public class AccountService {
 
 		List<AccountPageItem> accounts = page.get()
 				.map(a -> AccountPageItem.builder()
+						.id(a.getId())
 						.username(a.getUsername())
 						.email(a.getEmail())
 						.firstName(a.getFirstName())

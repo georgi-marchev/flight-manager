@@ -90,16 +90,20 @@ public class DataInitializerCommandLineRunner implements CommandLineRunner {
 	// TODO
 	private void createFlightData() {
 
-		accountService.createAccount(
-				AccountCreateRequest.builder()
-						.username("employee")
-						.password("1234")
-						.email("f@fake.com")
-						.firstName("Employeename")
-						.lastName("EMployeelastname")
-						.address("Some fake address")
-						.personalIdentificationNumber("123123213")
-						.build(), RoleType.EMPLOYEE);
+		for (int i = 1; i <= 10; i++) {
+
+			accountService.createAccount(
+					AccountCreateRequest.builder()
+							.username("employee" + i)
+							.password("1234")
+							.email(i + "employee@fake.com")
+							.firstName("EmployeeName" + i)
+							.lastName("EmployeeLastname" + i)
+							.address("Fake address" + i)
+							.personalIdentificationNumber(String.valueOf(1000000000 + i))
+							.build(), RoleType.EMPLOYEE);
+		}
+
 
 		AirplaneModel airplaneModel = AirplaneModel.builder().modelNumber("111").capacityEconomy(5).capacityBusiness(2).build();
 		airplaneModelRepository.save(airplaneModel);
@@ -133,7 +137,27 @@ public class DataInitializerCommandLineRunner implements CommandLineRunner {
 				.departureTime(now.plusHours(2))
 				.arrivalTime(now.plusHours(3))
 				.build();
+
+		ZonedDateTime tomorrow = now.plusDays(1);
+		FlightCreateRequest flight3 = FlightCreateRequest.builder()
+				.flightAirplane(airplane.getId())
+				.flightPilot(pilot.getId())
+				.flightDepartureLocation(location1.getId())
+				.flightDestinationLocation(location2.getId())
+				.departureTime(tomorrow)
+				.arrivalTime(tomorrow.plusHours(1))
+				.build();
+		FlightCreateRequest flight4 = FlightCreateRequest.builder()
+				.flightAirplane(airplane.getId())
+				.flightPilot(pilot.getId())
+				.flightDepartureLocation(location3.getId())
+				.flightDestinationLocation(location4.getId())
+				.departureTime(tomorrow.plusHours(2))
+				.arrivalTime(tomorrow.plusHours(3))
+				.build();
 		flightService.createFlight(flight1);
 		flightService.createFlight(flight2);
+		flightService.createFlight(flight3);
+		flightService.createFlight(flight4);
 	}
 }

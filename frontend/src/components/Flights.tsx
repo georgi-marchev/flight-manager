@@ -43,7 +43,6 @@ const Flights = () => {
                     }
                 });
 
-                console.log(response.data);
                 const data = response.data;
                 setFlights(data.content);
                 setHasNext(data.hasNext);
