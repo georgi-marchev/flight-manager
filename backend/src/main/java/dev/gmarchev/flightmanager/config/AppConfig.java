@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -81,20 +82,20 @@ public class AppConfig {
 					auth.requestMatchers("/employee-accounts/**").hasRole("ADMIN");
 					auth.requestMatchers(HttpMethod.GET, "/flights").permitAll();
 					auth.requestMatchers(HttpMethod.POST, "/flights").hasRole("ADMIN");
-					auth.requestMatchers(HttpMethod.POST, "/flights/{id}/book").permitAll();
-					auth.requestMatchers("/flights").permitAll();
+					auth.requestMatchers(HttpMethod.GET, "/flights/{id}").permitAll();
+					auth.requestMatchers(HttpMethod.POST, "/reservations").permitAll();
 					auth.anyRequest().authenticated();
-					// TODO: Remove
-//					auth.anyRequest().permitAll();
 				})
-				.headers(headers -> headers.frameOptions().disable()) // Disable X-Frame-Options header for H2 console )
+				.headers(headers -> headers.frameOptions(FrameOptionsConfig::disable)) // Disable X-Frame-Options header for H2 console
 				.csrf(AbstractHttpConfigurer::disable)
 				// TODO: Configure properly for production
 				.cors(cors -> cors.configurationSource(request -> {
 					CorsConfiguration configuration = new CorsConfiguration();
-					configuration.setAllowedOrigins(Arrays.asList("*"));
+//					configuration.setAllowedOrigins(Arrays.asList("*"));
+					configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
 					configuration.setAllowedMethods(Arrays.asList("*"));
 					configuration.setAllowedHeaders(Arrays.asList("*"));
+					configuration.setAllowCredentials(true);
 					return configuration;
 				}))
 				.sessionManagement(

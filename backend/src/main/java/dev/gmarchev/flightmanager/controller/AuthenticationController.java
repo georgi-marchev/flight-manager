@@ -2,9 +2,12 @@ package dev.gmarchev.flightmanager.controller;
 
 import dev.gmarchev.flightmanager.dto.AuthenticationRequest;
 import dev.gmarchev.flightmanager.dto.AuthenticationResponse;
+import dev.gmarchev.flightmanager.dto.RefreshTokenRequest;
 import dev.gmarchev.flightmanager.security.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,12 +17,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+/**
+ * TODO: Improve by adding access and refresh tokens to the database
+ * When new tokens are issued on login or refresh, invalidate old tokens.
+ */
 public class AuthenticationController {
 
 	private final AuthenticationManager authenticationManager;
@@ -55,27 +62,27 @@ public class AuthenticationController {
 	}
 
 	@PostMapping({"/refresh-token", "/refresh-token/"})
-	public ResponseEntity<?> refreshToken(@RequestParam String refreshToken) {
+	public ResponseEntity<?> refreshToken(@RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
 
-		if (refreshToken == null || refreshToken.isEmpty()) {
+		try	{
 
-			return ResponseEntity
-					.status(HttpStatus.BAD_REQUEST)
-					.body("Refresh token is required");
-		}
+			String username = jwtService.extractUsername(refreshTokenRequest.getRefreshToken());
 
-		if (jwtService.isTokenExpired(refreshToken)) {
+			return ResponseEntity.ok(new AuthenticationResponse(
+					jwtService.generateAccessToken(username), jwtService.generateRefreshToken(username)));
 
+		} catch (ExpiredJwtException e) {
+
+			log.error("Expired token.", e);
 			return ResponseEntity
 					.status(HttpStatus.UNAUTHORIZED)
-					.body("Refresh token has expired");
+					.body("Token expired");
+		} catch (Exception e) {
+
+			log.error("Error processing request.", e);
+			return ResponseEntity
+					.status(HttpStatus.UNAUTHORIZED)
+					.body("Unexpected error");
 		}
-
-		String username = jwtService.extractUsername(refreshToken);
-
-		// TODO: Improve by adding refresh tokens to the database and check if it is present and is not blacklisted.
-		//  Blacklist old refresh token if new one is issued.
-		return ResponseEntity.ok(new AuthenticationResponse(
-				jwtService.generateAccessToken(username), jwtService.generateRefreshToken(username)));
 	}
 }

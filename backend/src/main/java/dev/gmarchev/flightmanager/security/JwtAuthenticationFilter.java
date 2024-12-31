@@ -3,11 +3,14 @@ package dev.gmarchev.flightmanager.security;
 import java.io.IOException;
 
 import dev.gmarchev.flightmanager.service.AuthenticationService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtService jwtService;
@@ -29,16 +33,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		String token = getJwtFromRequest(request);
 
-		// TODO:
-		// SecurityContextHolder.getContext().getAuthentication() == null
-
 		if (token != null) {
 
-			String tokenUsername = jwtService.extractUsername(token);
+			try	{
 
-			UserDetails userDetails = authenticationService.loadUserByUsername(tokenUsername);
+				String tokenUsername = jwtService.extractUsername(token);
 
-			if (!jwtService.isTokenExpired(token)) {
+				UserDetails userDetails = authenticationService.loadUserByUsername(tokenUsername);
 
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						tokenUsername,
@@ -47,6 +48,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			} catch (ExpiredJwtException e) {
+
+				log.error("Token expired.", e);
+
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.getWriter().write("{\"error\": \"Token expired\"}");
+				return;
 			}
 		}
 
