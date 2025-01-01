@@ -35,7 +35,7 @@ public class AuthenticationController {
 
 	private final JwtService jwtService;
 
-	@PostMapping({"/login", "/login/"})
+	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody @Valid AuthenticationRequest authenticationRequest) {
 
 		String username = authenticationRequest.getUsername();
@@ -68,7 +68,7 @@ public class AuthenticationController {
 		}
 	}
 
-	@PostMapping({"/refresh-token", "/refresh-token/"})
+	@PostMapping("/refresh-token")
 	public ResponseEntity<?> refreshToken(@RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
 
 		try	{

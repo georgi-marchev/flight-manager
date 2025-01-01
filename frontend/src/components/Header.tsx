@@ -5,8 +5,8 @@ import useAuth from '../hooks/useAuth';
 const Header = () => {
 
     const { auth } = useAuth();
-    console.log(auth);
-    const isAmind = auth && auth.authorities && auth.authorities.includes('ROLE_ADMIN');
+    const isAmind = Boolean(auth && auth.authorities && auth.authorities.includes('ROLE_ADMIN'));
+    const isLoggedIn = Boolean(auth && auth.accessToken);
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
@@ -17,16 +17,17 @@ const Header = () => {
                     <Nav className="me-auto">
                         <Link className="nav-link" to="/">Home</Link>
                         <Link className="nav-link" to="/flights">Flights</Link>
+                        {!isLoggedIn || <Link className="nav-link" to="/reservations">Резервации</Link>}
                         {isAmind && (
                             <Link className="nav-link" to="/employees">Служители</Link>
                         )}
-                        {!auth.accessToken 
+                        {!isLoggedIn 
                             ? (<Link className="nav-link" to="/login">Влез</Link>)
                             : (<Link className="nav-link" to="/logout">Излез</Link>)
                         }
                     </Nav>
                 </Navbar.Collapse>
-                {auth.username && (
+                {isLoggedIn && auth.username && (
                     <span className="fw-bold">{auth.username}</span>
                 )}
             </Container>

@@ -76,9 +76,7 @@ public class AppConfig {
 					auth.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll();
 					auth.requestMatchers("/h2-console/**").permitAll();
 					auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll();
-					auth.requestMatchers(
-							"/auth/login", "/auth/login/", "/auth/refresh-token", "/auth/refresh-token/")
-							.permitAll();
+					auth.requestMatchers("/auth/login", "/auth/refresh-token").permitAll();
 					auth.requestMatchers("/employee-accounts/**").hasRole("ADMIN");
 					auth.requestMatchers(HttpMethod.GET, "/flights").permitAll();
 					auth.requestMatchers(HttpMethod.POST, "/flights").hasRole("ADMIN");

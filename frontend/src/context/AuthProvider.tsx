@@ -9,29 +9,24 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState(() => {
+
+        const authorities = localStorage.getItem(AUTHORITIES_KEY);
         return {
             accessToken: localStorage.getItem(ACCESS_TOKEN_KEY) || null,
             refreshToken: localStorage.getItem(REFRESH_TOKEN_KEY) || null,
-            authorities: localStorage.getItem(AUTHORITIES_KEY) || [],
-            username: localStorage.getItem(AUTHORITIES_KEY) || null
+            authorities: authorities ? JSON.parse(authorities) : [],
+            username: localStorage.getItem(USERNAME_KEY) || null
         };
     });
 
     // Save tokens to localStorage whenever they change
     useEffect(() => {
-        if (auth.accessToken) {
-            localStorage.setItem(ACCESS_TOKEN_KEY, auth.accessToken);
-        }
-        if (auth.refreshToken) {
-            localStorage.setItem(REFRESH_TOKEN_KEY, auth.refreshToken);
-        }
-        if (auth.authorities) {
-            localStorage.setItem(AUTHORITIES_KEY, auth.authorities);
-        }
-        if (auth.username) {
-            localStorage.setItem(USERNAME_KEY, auth.username);
-        }
-    }, [auth.accessToken, auth.refreshToken, auth.authorities]);
+        console.log('setting them');
+        auth.accessToken ? localStorage.setItem(ACCESS_TOKEN_KEY, auth.accessToken) : localStorage.removeItem(ACCESS_TOKEN_KEY);
+        auth.refreshToken ? localStorage.setItem(REFRESH_TOKEN_KEY, auth.refreshToken) : localStorage.removeItem(REFRESH_TOKEN_KEY);
+        auth.authorities ? localStorage.setItem(AUTHORITIES_KEY, JSON.stringify(auth.authorities)) : localStorage.removeItem(AUTHORITIES_KEY);
+        auth.username ? localStorage.setItem(USERNAME_KEY, auth.username) : localStorage.removeItem(USERNAME_KEY);
+    }, [auth.accessToken, auth.refreshToken, auth.authorities, auth.username]);
 
     return (
         <AuthContext.Provider value={{ auth, setAuth }}>

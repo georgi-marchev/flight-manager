@@ -8,7 +8,9 @@ import Missing from './components/Missing';
 import Login from './components/Login';
 import Logout from './components/Logout.tsx';
 import Employees from './components/Employees.tsx';
-import RequireAuth from './components/RequireAuth.tsx';
+import RequireAuthentication from './components/RequireAuthentication.tsx';
+import RequireAuthorization from './components/RequireAuthorization.tsx';
+import Reservations from './components/Reservations.tsx';
 
 
 function App() {
@@ -18,10 +20,15 @@ function App() {
                 <Route path='login' element={<Login />} />
                 <Route path='logout' element={<Logout />} />
                 <Route index element={<Flights />} />
-                <Route path="/flights/:id/create-reservation" element={<CreateReservation />} />
-                <Route element={<RequireAuth allowedRoles={['ROLE_ADMIN']} />}>
-                    <Route path="/employees" element={<Employees />} />
+                
+                <Route element={<RequireAuthentication />}>
+                    <Route path="/reservations" element={<Reservations />} />
+                    <Route element={<RequireAuthorization allowedRoles={['ROLE_ADMIN']} />}>
+                        <Route path="/employees" element={<Employees />} />
+                    </Route>
                 </Route>
+                
+                <Route path="/flights/:id/create-reservation" element={<CreateReservation />} />
                 <Route path="*" element={<Missing />} />
             </Route>
         </Routes>
