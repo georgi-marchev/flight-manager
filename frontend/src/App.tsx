@@ -11,7 +11,7 @@ import Employees from './components/Employees.tsx';
 import RequireAuthentication from './components/RequireAuthentication.tsx';
 import RequireAuthorization from './components/RequireAuthorization.tsx';
 import Reservations from './components/Reservations.tsx';
-
+import Reservation from './components/Reservation.tsx';
 
 function App() {
     return (
@@ -23,6 +23,7 @@ function App() {
                 
                 <Route element={<RequireAuthentication />}>
                     <Route path="/reservations" element={<Reservations />} />
+                    <Route path="/reservations/:id" element={<Reservation />} />
                     <Route element={<RequireAuthorization allowedRoles={['ROLE_ADMIN']} />}>
                         <Route path="/employees" element={<Employees />} />
                     </Route>

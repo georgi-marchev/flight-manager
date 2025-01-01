@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
 
     // Save tokens to localStorage whenever they change
     useEffect(() => {
-        console.log('setting them');
         auth.accessToken ? localStorage.setItem(ACCESS_TOKEN_KEY, auth.accessToken) : localStorage.removeItem(ACCESS_TOKEN_KEY);
         auth.refreshToken ? localStorage.setItem(REFRESH_TOKEN_KEY, auth.refreshToken) : localStorage.removeItem(REFRESH_TOKEN_KEY);
         auth.authorities ? localStorage.setItem(AUTHORITIES_KEY, JSON.stringify(auth.authorities)) : localStorage.removeItem(AUTHORITIES_KEY);

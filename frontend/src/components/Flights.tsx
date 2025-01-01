@@ -177,7 +177,7 @@ const Flights = () => {
                         </thead>
                         <tbody>
                             {flights.map((flight: Flight) => (
-                            <tr key={flight.departureTime}>
+                            <tr key={flight.id}>
                                 <td>{formatDateTime(flight.departureTime)}</td>
                                 <td>{formatDateTime(flight.arrivalTime)}</td>
                                 <td>{flight.departureLocation}</td>
