@@ -6,7 +6,6 @@ import Flights from './components/Flights';
 import CreateReservation from './components/CreateReservation';
 import Missing from './components/Missing';
 import Login from './components/Login';
-import Logout from './components/Logout.tsx';
 import Employees from './components/Employees.tsx';
 import RequireAuthentication from './components/RequireAuthentication.tsx';
 import RequireAuthorization from './components/RequireAuthorization.tsx';
@@ -18,7 +17,6 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route path='login' element={<Login />} />
-                <Route path='logout' element={<Logout />} />
                 <Route index element={<Flights />} />
                 
                 <Route element={<RequireAuthentication />}>

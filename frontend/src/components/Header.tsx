@@ -1,6 +1,7 @@
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import useAuth from '../hooks/useAuth';
+import CurrentUser from './CurrentUser';
 
 const Header = () => {
 
@@ -21,15 +22,12 @@ const Header = () => {
                         {isAmind && (
                             <Link className="nav-link" to="/employees">Служители</Link>
                         )}
-                        {!isLoggedIn 
-                            ? (<Link className="nav-link" to="/login">Влез</Link>)
-                            : (<Link className="nav-link" to="/logout">Излез</Link>)
-                        }
                     </Nav>
                 </Navbar.Collapse>
-                {isLoggedIn && auth.username && (
-                    <span className="fw-bold">{auth.username}</span>
-                )}
+                {!isLoggedIn 
+                    ? (<Link className="nav-link" to="/login">Вход</Link>)
+                    : (<CurrentUser />)
+                }
             </Container>
         </Navbar>
     )
