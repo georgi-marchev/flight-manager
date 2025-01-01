@@ -2,9 +2,8 @@ package dev.gmarchev.flightmanager.security;
 
 import java.io.IOException;
 
-import dev.gmarchev.flightmanager.service.AuthenticationService;
+import dev.gmarchev.flightmanager.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtService jwtService;
 
-	private final AuthenticationService authenticationService;
+	private final UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -39,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 				String tokenUsername = jwtService.extractUsername(token);
 
-				UserDetails userDetails = authenticationService.loadUserByUsername(tokenUsername);
+				UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(tokenUsername);
 
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						tokenUsername,

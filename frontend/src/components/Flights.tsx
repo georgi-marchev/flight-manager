@@ -16,12 +16,14 @@ interface Flight {
 }
 
 const Flights = () => {
+    const now = new Date();
+    const localDateNow = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
     const [flights, setFlights] = useState([]);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(PAGE_SIZES[0]);
     const [hasNext, setHasNext] = useState(false);
     const [filters, setFilters] = useState({
-        departureDate: new Date().toISOString().split('T')[0],
+        departureDate: localDateNow,
         departureLocation: '',
         destinationLocation: '',
         availableSeatsEconomy: '',
@@ -29,8 +31,12 @@ const Flights = () => {
     });
     const [errorMessage, setErrorMessage] = useState('');
 
-    // Fetch flights based on current filters and pagination
     useEffect(() => {
+
+        console.log(new Date().toISOString().split('T')[0]);
+        const date = new Date();
+        const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+        console.log(localDate);
         
         const fetchFlights = async () => {
             
@@ -69,8 +75,8 @@ const Flights = () => {
     };
 
     const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setSize(Number(event.target.value)); // Update page size and reset to first page
-        setPage(0); // Reset page to 0 when page size changes
+        setSize(Number(event.target.value));
+        setPage(0);
     };
 
     const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -82,7 +88,7 @@ const Flights = () => {
     };
 
     return (
-        <main>
+        <main className="bg-light py-5">
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
                 <header className="mb-4 mt-3">

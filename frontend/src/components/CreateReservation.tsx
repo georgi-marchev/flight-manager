@@ -19,19 +19,19 @@ interface Flight {
 }
 
 interface ReservationRequestPassenger {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  personalIdentificationNumber: string;
-  phoneNumber: string;
-  nationality: string;
-  seatType: "ECONOMY" | "BUSINESS";
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    personalIdentificationNumber: string;
+    phoneNumber: string;
+    nationality: string;
+    seatType: "ECONOMY" | "BUSINESS";
 }
 
 interface ReservationRequest {
-  flightId: number;
-  contactEmail: string;
-  passengers: ReservationRequestPassenger[];
+    flightId: number;
+    contactEmail: string;
+    passengers: ReservationRequestPassenger[];
 }
 
 function createEmptyPassenger(): ReservationRequestPassenger {
@@ -159,7 +159,7 @@ const CreateReservation = () => {
     }
 
     return (
-        <main>
+        <main className="bg-light py-5">
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
                 <section className='mt-5 mb-3'>

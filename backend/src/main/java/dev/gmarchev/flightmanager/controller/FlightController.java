@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 import dev.gmarchev.flightmanager.dto.FlightCreateRequest;
 import dev.gmarchev.flightmanager.dto.FlightPageItem;
+import dev.gmarchev.flightmanager.dto.FlightPassengerPageItem;
 import dev.gmarchev.flightmanager.dto.FlightResponse;
 import dev.gmarchev.flightmanager.dto.PageResponse;
-import dev.gmarchev.flightmanager.dto.PassengerPageItem;
 import dev.gmarchev.flightmanager.service.FlightService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -80,8 +80,8 @@ public class FlightController {
 		}
 	}
 
-	@GetMapping("/{id}/paggengers")
-	public ResponseEntity<PageResponse<PassengerPageItem>> getFlightPassengersById(
+	@GetMapping("/{id}/passengers")
+	public ResponseEntity<PageResponse<FlightPassengerPageItem>> getFlightReservationsById(
 			@PathVariable long id,
 			@RequestParam int page,
 			@RequestParam int size) {
@@ -90,7 +90,7 @@ public class FlightController {
 		// by the client from getFlightById()
 		try {
 
-			return ResponseEntity.ok(flightService.getPassengersByFlightById(id, page, size));
+			return ResponseEntity.ok(flightService.getReservationPassengersByFlightById(id, page, size));
 
 		} catch (IllegalArgumentException e) {
 

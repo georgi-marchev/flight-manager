@@ -42,7 +42,8 @@ const useAuthenticatedApiClient = () => {
                                 return {
                                     ...prev,
                                     refreshToken: response.data.refreshToken,
-                                    accessToken: response.data.accessToken
+                                    accessToken: response.data.accessToken,
+                                    authorities: response.data.authorities
                                 }
                             });
                             config.headers['Authorization'] = `Bearer ${response.data.accessToken}`;

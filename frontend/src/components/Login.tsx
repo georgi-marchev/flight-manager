@@ -18,9 +18,7 @@ const Login = () => {
             const response = await apiClient.post('/auth/login', { username, password });
             const { accessToken, refreshToken, authorities } = response.data;
             // TODO: extract method
-            console.log(username);
             setAuth({ accessToken, refreshToken, authorities, username});
-            console.log(response.data);
             setErrorMessage('');
             navigate(`/`);
         } catch (error) {
@@ -30,7 +28,7 @@ const Login = () => {
     };
 
     return (
-        <main>
+        <main className="bg-light py-5">
             <Container className="mt-5">
                 <h4>Влизане в профил</h4>
                 <Form onSubmit={handleLogin}>

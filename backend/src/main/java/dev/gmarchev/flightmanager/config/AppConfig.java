@@ -3,7 +3,7 @@ package dev.gmarchev.flightmanager.config;
 import java.util.Arrays;
 
 import dev.gmarchev.flightmanager.security.JwtAuthenticationFilter;
-import dev.gmarchev.flightmanager.service.AuthenticationService;
+import dev.gmarchev.flightmanager.service.UserDetailsServiceImpl;
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -35,7 +35,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class AppConfig {
 
-	private final AuthenticationService authenticationService;
+	private final UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -46,7 +46,7 @@ public class AppConfig {
 	@Bean
 	public UserDetailsService userDetailsService() {
 
-		return authenticationService;
+		return userDetailsServiceImpl;
 	}
 
 	@Bean
@@ -59,7 +59,7 @@ public class AppConfig {
 	public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
 
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setUserDetailsService(authenticationService);
+		authProvider.setUserDetailsService(userDetailsServiceImpl);
 		authProvider.setPasswordEncoder(passwordEncoder);
 
 		return authProvider;

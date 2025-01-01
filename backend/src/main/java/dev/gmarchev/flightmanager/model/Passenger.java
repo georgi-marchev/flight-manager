@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,4 +43,8 @@ public class Passenger {
 
 	@Enumerated(EnumType.STRING)
 	private SeatType seatType;
+
+	@ManyToOne
+	@JoinColumn(name = "reservation_id", referencedColumnName = "id")
+	private Reservation passengerReservation;
 }

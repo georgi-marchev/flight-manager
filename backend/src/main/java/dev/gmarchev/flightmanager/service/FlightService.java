@@ -1,27 +1,23 @@
 package dev.gmarchev.flightmanager.service;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import dev.gmarchev.flightmanager.dto.FlightCreateRequest;
 import dev.gmarchev.flightmanager.dto.FlightPageItem;
+import dev.gmarchev.flightmanager.dto.FlightPassengerPageItem;
 import dev.gmarchev.flightmanager.dto.FlightResponse;
 import dev.gmarchev.flightmanager.dto.PageResponse;
-import dev.gmarchev.flightmanager.dto.PassengerPageItem;
 import dev.gmarchev.flightmanager.model.Airplane;
 import dev.gmarchev.flightmanager.model.Flight;
 import dev.gmarchev.flightmanager.model.Location;
 import dev.gmarchev.flightmanager.model.Passenger;
 import dev.gmarchev.flightmanager.model.Pilot;
-import dev.gmarchev.flightmanager.model.Reservation;
 import dev.gmarchev.flightmanager.repository.AirplaneRepository;
 import dev.gmarchev.flightmanager.repository.FlightRepository;
 import dev.gmarchev.flightmanager.repository.LocationRepository;
+import dev.gmarchev.flightmanager.repository.PassengerRepository;
 import dev.gmarchev.flightmanager.repository.PilotRepository;
-import dev.gmarchev.flightmanager.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -41,7 +37,7 @@ public class FlightService {
 
 	private final PilotRepository pilotRepository;
 
-	private final ReservationRepository reservationRepository;
+	private final PassengerRepository passengerRepository;
 
 	public void createFlight(FlightCreateRequest flightCreateRequest) {
 
@@ -141,36 +137,32 @@ public class FlightService {
 				locationToString(flight.getFlightDestinationLocation()));
 	}
 
-	public PageResponse<PassengerPageItem> getPassengersByFlightById(long flightId, int pageNumber, int pageSize) {
+	public PageResponse<FlightPassengerPageItem> getReservationPassengersByFlightById(long flightId, int pageNumber, int pageSize) {
 
 		flightRepository.findById(flightId)
 				.orElseThrow(() -> new IllegalArgumentException("Flight not found"));
 
-		Page<Reservation> page = reservationRepository.findByReservationFlightId(
-				flightId, PageRequest.of(pageNumber, pageSize));
+		Page<Passenger> page = passengerRepository
+				.findAllPassengersByFlightId(flightId, PageRequest.of(pageNumber, pageSize));
 
-		List<PassengerPageItem> passengerPageItemList = getPassengerPageItemList(page);
-
-		return new PageResponse<>(passengerPageItemList, page.hasNext());
+		return new PageResponse<>(getReservationPageItemList(page), page.hasNext());
 	}
 
-	private static List<PassengerPageItem> getPassengerPageItemList(Iterable<Reservation> reservations) {
+	private static List<FlightPassengerPageItem> getReservationPageItemList(Page<Passenger> passengers) {
 
-		List<PassengerPageItem> passengers = new ArrayList<>();
-
-		for (Reservation reservation : reservations) {
-
-			for (Passenger passenger : reservation.getPassengers()) {
-
-				passengers.add(
-						new PassengerPageItem(
-								reservation.getId(),
-								passenger.getFirstName(),
-								passenger.getMiddleName(),
-								passenger.getLastName()));
-			}
-		}
-
-		return passengers;
+		return passengers
+				.stream()
+				.map(p -> new FlightPassengerPageItem(
+						p.getId(),
+						p.getPassengerReservation().getId(),
+						p.getFirstName(),
+						p.getMiddleName(),
+						p.getLastName(),
+						p.getPersonalIdentificationNumber(),
+						p.getPhoneNumber(),
+						p.getNationality(),
+						p.getSeatType()
+				))
+				.toList();
 	}
 }

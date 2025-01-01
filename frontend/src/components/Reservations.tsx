@@ -76,7 +76,7 @@ const Reservations = () => {
     };
 
     return (
-        <main>
+        <main className="bg-light py-5">
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
                 <header className="mb-4 mt-3">
@@ -115,28 +115,32 @@ const Reservations = () => {
                     <Row xs={1} sm={2} md={3} lg={4} className="g-4">
                         {reservations.map((res: Reservation) => (
                             <Col key={res.id}>
-                                <Card className="shadow-sm d-flex flex-column align-items-center justify-content-center text-center" >
+                                <Card className="mt-3 shadow-sm bg-white rounded d-flex flex-column align-items-center justify-content-center text-center">
                                     <Card.Body>
                                         <Card.Title id="reservation" className="mb-3">
-                                            <h2>
-                                                <Link to={`/flights/${res.reservationFlight}`}>
-                                                    Полет {res.reservationFlight}
-                                                </Link>
-                                            </h2>
+                                            <h2><strong>Резервация {res.id}</strong></h2>
                                         </Card.Title>
                                         <ListGroup variant="flush">
                                             <ListGroup.Item className="d-flex justify-content-between">
                                                 Имейл: <span className="ms-3"><a href={`mailto:${res.contactEmail}`} className="link-primary"> {res.contactEmail}</a></span>
                                             </ListGroup.Item>
+                                            <ListGroup.Item className="d-flex justify-content-center">
+                                                <Link
+                                                    to={`/flights/${res.reservationFlight}`}
+                                                    className="btn btn-outline-primary text-decoration-none"
+                                                >
+                                                    Виж полет
+                                                </Link>
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className="d-flex justify-content-center">
+                                                <Link
+                                                    to={`/reservations/${res.id}`}
+                                                    className="btn btn-outline-primary text-decoration-none"
+                                                >
+                                                    Виж детайли
+                                                </Link>
+                                            </ListGroup.Item>
                                         </ListGroup>
-                                        <Card.Text className='mt-3'>
-                                            <Link
-                                                to={`/reservations/${res.id}`}
-                                                className="btn btn-outline-primary text-decoration-none"
-                                            >
-                                                Виж детайли
-                                            </Link>
-                                        </Card.Text>
                                     </Card.Body>
                                 </Card>
                             </Col>

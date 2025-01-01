@@ -80,7 +80,7 @@ const Employees = () => {
     };
 
     return (
-        <main>
+        <main className="bg-light py-5">
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
                  <header className="mb-4 mt-3">
