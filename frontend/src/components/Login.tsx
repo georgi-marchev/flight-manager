@@ -16,8 +16,10 @@ const Login = () => {
         
         try {
             const response = await apiClient.post('/auth/login', { username, password });
-            const { accessToken, refreshToken } = response.data;
-            setAuth({ accessToken, refreshToken});
+            const { accessToken, refreshToken, authorities } = response.data;
+            // TODO: extract method
+            console.log(username);
+            setAuth({ accessToken, refreshToken, authorities, username});
             console.log(response.data);
             setErrorMessage('');
             navigate(`/`);

@@ -1,8 +1,9 @@
 package dev.gmarchev.flightmanager.controller;
 
 import dev.gmarchev.flightmanager.dto.AuthenticationRequest;
-import dev.gmarchev.flightmanager.dto.AuthenticationResponse;
+import dev.gmarchev.flightmanager.dto.LoginResponse;
 import dev.gmarchev.flightmanager.dto.RefreshTokenRequest;
+import dev.gmarchev.flightmanager.dto.RefreshTokenResponse;
 import dev.gmarchev.flightmanager.security.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,9 +51,14 @@ public class AuthenticationController {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			return ResponseEntity.ok(
-					new AuthenticationResponse(
+					new LoginResponse(
 							jwtService.generateAccessToken(username),
-							jwtService.generateRefreshToken(username)));
+							jwtService.generateRefreshToken(username),
+							authentication
+									.getAuthorities()
+									.stream()
+									.map(GrantedAuthority::getAuthority)
+									.toList()));
 
 		} else {
 
@@ -68,7 +75,7 @@ public class AuthenticationController {
 
 			String username = jwtService.extractUsername(refreshTokenRequest.getRefreshToken());
 
-			return ResponseEntity.ok(new AuthenticationResponse(
+			return ResponseEntity.ok(new RefreshTokenResponse(
 					jwtService.generateAccessToken(username), jwtService.generateRefreshToken(username)));
 
 		} catch (ExpiredJwtException e) {

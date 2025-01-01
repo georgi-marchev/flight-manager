@@ -51,7 +51,9 @@ const useAuthenticatedApiClient = () => {
                             // TODO: Extract method
                             setAuth({
                                 accessToken: null,
-                                refreshToken: null
+                                refreshToken: null,
+                                authorities: [],
+                                username: null
                             });
                             navigate('/login')
                             return Promise.reject(error);
