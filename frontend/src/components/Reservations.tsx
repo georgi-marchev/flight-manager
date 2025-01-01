@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import useAuthenticatedApiClient from '../hooks/useAuthenticatedApiClient';
 import Pagination from './Pagination';
-import { Alert, Col, Container, Form, Row, Table } from 'react-bootstrap';
+import { Alert, Col, Container, Form, Row, Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 
-const PAGE_SIZES = [1, 25, 50];
+const PAGE_SIZES = [10, 25, 50];
 
 interface Reservation {
     id: number;
@@ -79,14 +79,14 @@ const Reservations = () => {
         <main>
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
-                <header>
-                    <h1>Резервации</h1>
+                <header className="mb-4 mt-3">
+                    <h1 className="text-center text-primary">Резервации</h1>
                 </header>
                 <section>
                     <Form>
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="contactEmail">
-                                <Form.Label>Имейл</Form.Label>
+                                <Form.Label>Имейл:</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Имейл" 
@@ -96,7 +96,7 @@ const Reservations = () => {
                                 />
                             </Form.Group>
                             <Form.Group as={Col} controlId="pageSize">
-                                <Form.Label>Резултати на страница</Form.Label>
+                                <Form.Label>Резултати на страница:</Form.Label>
                                 <Form.Select 
                                     aria-label="Резултати на страница" 
                                     value={size}
@@ -111,29 +111,37 @@ const Reservations = () => {
                         </Row>
                     </Form>
                 </section>
-                <section aria-labelledby="employees">
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>Имейл</th>
-                                <th>Полет</th>
-                                <th>Детайли</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {reservations.map((res: Reservation) => (
-                            <tr key={res.id}>
-                                <td>{res.contactEmail}</td>
-                                <td>
-                                    <Link className='link-primary' to={`/flights/${res.reservationFlight}`}>Виж полет</Link>
-                                </td>
-                                <td>
-                                    <Link className='link-primary' to={`/reservations/${res.id}`}> Виж резервация</Link>
-                                </td>
-                            </tr>
-                            ))}
-                        </tbody>
-                    </Table>
+                <section aria-labelledby="reservations-list">
+                    <Row xs={1} sm={2} md={3} lg={4} className="g-4">
+                        {reservations.map((res: Reservation) => (
+                            <Col key={res.id}>
+                                <Card className="shadow-sm d-flex flex-column align-items-center justify-content-center text-center" >
+                                    <Card.Body>
+                                        <Card.Title id="reservation" className="mb-3">
+                                            <h2>
+                                                <Link to={`/flights/${res.reservationFlight}`}>
+                                                    Полет {res.reservationFlight}
+                                                </Link>
+                                            </h2>
+                                        </Card.Title>
+                                        <ListGroup variant="flush">
+                                            <ListGroup.Item className="d-flex justify-content-between">
+                                                Имейл: <span className="ms-3"><a href={`mailto:${res.contactEmail}`} className="link-primary"> {res.contactEmail}</a></span>
+                                            </ListGroup.Item>
+                                        </ListGroup>
+                                        <Card.Text className='mt-3'>
+                                            <Link
+                                                to={`/reservations/${res.id}`}
+                                                className="btn btn-outline-primary text-decoration-none"
+                                            >
+                                                Виж детайли
+                                            </Link>
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
                 </section>
                 <section>
                     <Pagination 

@@ -163,10 +163,10 @@ const CreateReservation = () => {
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
                 <section className='mt-5 mb-3'>
-                    <h2>Полет</h2>
-                    <Card>
+                    <h2 className="text-center text-primary mb-4">Полет</h2>
+                    <Card className="shadow-sm d-flex flex-column align-items-center justify-content-center text-center">
                         <Card.Body>
-                            <Card.Title>{flight.departureLocation} до {flight.destinationLocation}</Card.Title>
+                            <Card.Title>{flight.departureLocation} → {flight.destinationLocation}</Card.Title>
                             <ListGroup variant="flush">
                                 <ListGroup.Item>Излита: {formatDateTime(flight.departureTime)}</ListGroup.Item>
                                 <ListGroup.Item>Времетраене: {getDuration(flight.departureTime, flight.arrivalTime)}</ListGroup.Item>
@@ -176,26 +176,29 @@ const CreateReservation = () => {
                         </Card.Body>
                     </Card>
                 </section>
-                <section>
-                    <h2>Резервация: </h2>
-                    <Form onSubmit={handleSubmit} className="border">
-                        <Row className="border p-3 m-3">
+
+                <section className="mt-5 mb-4">
+                    <h2 className="text-center text-primary mb-4">Резервация</h2>
+                    <Form onSubmit={handleSubmit} className="border p-4 rounded shadow-sm">
+                        <Row className="mb-4">
                             <Form.Group as={Col} controlId="contactEmail">
                                 <Form.Label>Имейл</Form.Label>
                                 <Form.Control
-                                type="email"
-                                placeholder="Въведете имейл адрес"
-                                value={contactEmail}
-                                onChange={(e) => setContactEmail(e.target.value)}
-                                required
+                                    type="email"
+                                    placeholder="Въведете имейл адрес"
+                                    value={contactEmail}
+                                    onChange={(e) => setContactEmail(e.target.value)}
+                                    required
                                 />
                             </Form.Group>
                         </Row>
 
                         {passengers.map((passenger, index) => (
-                            <Row key={index} className="border p-3 m-3">
-                                <h3>Пътник {index + 1}</h3>
-                                <Form.Group as={Col} controlId={`firstName${index}`}>
+                            <Row key={index} className="border rounded p-4 mb-4 shadow-sm">
+                                <h4 className="text-center mb-3">Пътник {index + 1}</h4>
+
+                                {/* Passenger Fields */}
+                                <Form.Group as={Col} controlId={`firstName${index}`} className="mb-3">
                                     <Form.Label>Име</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -205,7 +208,8 @@ const CreateReservation = () => {
                                         required
                                     />
                                 </Form.Group>
-                                <Form.Group as={Col} controlId={`middleName${index}`}>
+
+                                <Form.Group as={Col} controlId={`middleName${index}`} className="mb-3">
                                     <Form.Label>Презиме</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -215,7 +219,8 @@ const CreateReservation = () => {
                                         required
                                     />
                                 </Form.Group>
-                                <Form.Group as={Col} controlId={`lastName${index}`}>
+
+                                <Form.Group as={Col} controlId={`lastName${index}`} className="mb-3">
                                     <Form.Label>Фамилия</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -225,7 +230,8 @@ const CreateReservation = () => {
                                         required
                                     />
                                 </Form.Group>
-                                <Form.Group as={Col} controlId={`personalIdentificationNumber${index}`}>
+
+                                <Form.Group as={Col} controlId={`personalIdentificationNumber${index}`} className="mb-3">
                                     <Form.Label>ЕГН</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -239,7 +245,8 @@ const CreateReservation = () => {
                                         Невалиден формат на ЕГН.
                                     </Form.Control.Feedback>
                                 </Form.Group>
-                                <Form.Group as={Col} controlId={`nationality${index}`}>
+
+                                <Form.Group as={Col} controlId={`nationality${index}`} className="mb-3">
                                     <Form.Label>Гражданство</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -249,7 +256,8 @@ const CreateReservation = () => {
                                         required
                                     />
                                 </Form.Group>
-                                <Form.Group as={Col} controlId={`phoneNumber${index}`}>
+
+                                <Form.Group as={Col} controlId={`phoneNumber${index}`} className="mb-3">
                                     <Form.Label>Тел. №</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -260,10 +268,11 @@ const CreateReservation = () => {
                                         isInvalid={invalidFields[PHONE_NUMBER_NAME][index]}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Невалиден телефонен номер. Валидни номера могат да започват с '+' и да съдържат само цирфи.
+                                        Невалиден телефонен номер. Валидни номера могат да започват с '+' и да съдържат само цифри.
                                     </Form.Control.Feedback>
                                 </Form.Group>
-                                <Form.Group as={Col} controlId={`seatType${index}`}>
+
+                                <Form.Group as={Col} controlId={`seatType${index}`} className="mb-3">
                                     <Form.Label>Вид място</Form.Label>
                                     <Form.Control
                                         as="select"
@@ -276,25 +285,29 @@ const CreateReservation = () => {
                                         <option value="BUSINESS">Бизнес</option>
                                     </Form.Control>
                                 </Form.Group>
-                                <Form.Group as={Col} controlId={`seatType${index}`}>
+
+                                <Form.Group as={Col} controlId={`removePassenger${index}`} className="d-flex justify-content-center mb-3">
                                     <Button
                                         variant="danger"
                                         onClick={() => handleRemovePassenger(index)}
+                                        className="px-4 py-2"
                                     >
-                                    Изтрий
+                                        Изтрий
                                     </Button>
                                 </Form.Group>
                             </Row>
                         ))}
 
-                        <Row className="mx-auto">
-                            <Form.Group as={Col} controlId={'submitButton'}>
+                        <Row className="text-center mb-4">
+                            <Form.Group as={Col} controlId={'addPassenger'}>
                                 <Button variant="secondary" onClick={addPassenger}>
                                     Добави пътник
                                 </Button>
                             </Form.Group>
                         </Row>
-                        <Row className="mx-auto mt-5 mb-3">
+
+                        {/* Submit Button */}
+                        <Row className="text-center mt-5 mb-3">
                             <Form.Group as={Col} controlId={'submitButton'}>
                                 <Button variant="primary" type="submit" disabled={isLoading}>
                                     {isLoading ? <Spinner animation="border" size="sm" /> : 'Изпрати'}
@@ -303,8 +316,9 @@ const CreateReservation = () => {
                         </Row>
                     </Form>
                 </section>
-            </Container>  
+            </Container>
         </main>
+
     );
 };
 

@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import useAuthenticatedApiClient from '../hooks/useAuthenticatedApiClient';
 import Pagination from './Pagination';
-import { Alert, Col, Container, Form, Row, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
+import { Alert, Col, Container, Form, Row, Card, ListGroup } from 'react-bootstrap';
 
-const PAGE_SIZES = [1, 25, 50];
+const PAGE_SIZES = [10, 25, 50];
 
 interface Employee {
     id: number;
@@ -84,8 +83,8 @@ const Employees = () => {
         <main>
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
-                <header>
-                    <h1>Служители</h1>
+                 <header className="mb-4 mt-3">
+                    <h1 className="text-center text-primary">Служители</h1>
                 </header>
                 <section>
                     <Form>
@@ -151,29 +150,29 @@ const Employees = () => {
                         </Row>
                     </Form>
                 </section>
-                <section aria-labelledby="employees">
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>Потребителско име</th>
-                                <th>Имейл</th>
-                                <th>Име</th>
-                                <th>Фамилия</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {employees.map((employee: Employee) => (
-                            <tr key={employee.id}>
-                                <td>{employee.username}</td>
-                                <td>{employee.email}</td>
-                                <td>{employee.firstName}</td>
-                                <td>{employee.lastName}</td>
-                                <td>TODO</td>
-                            </tr>
-                            ))}
-                        </tbody>
-                    </Table>
+                <section aria-labelledby="employee-list">
+                    <Row xs={1} sm={2} md={3} lg={4} className="g-4">
+                        {employees.map((employee: Employee) => (
+
+                            <Col key={employee.id} md={6} lg={4} className="mb-4">
+                                <Card className="shadow-sm bg-white rounded p-4 d-flex flex-column align-items-center justify-content-center text-center">
+                                    <Card.Body>
+                                        <Card.Title>
+                                            <strong>{employee.firstName} {employee.lastName}</strong>
+                                        </Card.Title>
+                                        <ListGroup variant="flush">
+                                            <ListGroup.Item>
+                                                Потребителско име: {employee.username}
+                                            </ListGroup.Item>
+                                            <ListGroup.Item>
+                                                Имейл: <span className="ms-3"><a href={`mailto:${employee.email}`} className="link-primary"> {employee.email}</a></span>
+                                            </ListGroup.Item>
+                                        </ListGroup>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
                 </section>
                 <section>
                     <Pagination 
