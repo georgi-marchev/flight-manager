@@ -82,6 +82,7 @@ public class AppConfig {
 					auth.requestMatchers(HttpMethod.POST, "/flights").hasRole("ADMIN");
 					auth.requestMatchers(HttpMethod.GET, "/flights/{id}").permitAll();
 					auth.requestMatchers(HttpMethod.POST, "/reservations").permitAll();
+					auth.requestMatchers( "/pilots").hasRole("ADMIN");
 					auth.anyRequest().authenticated();
 				})
 				.headers(headers -> headers.frameOptions(FrameOptionsConfig::disable)) // Disable X-Frame-Options header for H2 console
