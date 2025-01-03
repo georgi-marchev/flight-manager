@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RefreshTokenRequest {
 
-	@NotBlank(message = "Refresh token cannot be empty or blank")
+//	@NotBlank(message = "Refresh token cannot be empty or blank")
+	@NotBlank(message = "refreshToken поле е задължително.")
 	private String refreshToken;
 }

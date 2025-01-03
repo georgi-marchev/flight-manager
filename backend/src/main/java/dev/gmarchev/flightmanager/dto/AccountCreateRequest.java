@@ -16,29 +16,37 @@ import lombok.NoArgsConstructor;
 @Data
 public class AccountCreateRequest {
 
-	@NotBlank(message = "Username cannot be empty or blank")
+//	@NotBlank(message = "Username cannot be empty or blank")
+	@NotBlank(message = "Потребителско име е задължително.")
 	private String username;
 
-	@NotBlank(message = "Password cannot be empty or blank")
+//	@NotBlank(message = "Password cannot be empty or blank")
+	@NotBlank(message = "Парола е задължителна.")
 	private String password;
 
-	@NotEmpty(message = "Email cannot be empty")
-	@Email(message = "Email is not valid")
+//	@NotEmpty(message = "Email cannot be empty")
+//	@Email(message = "Email is not valid")
+	@NotEmpty(message = "Имейл е задължителен.")
+	@Email(message = "Невалиден формат на имейл.")
 	private String email;
 
-	@NotBlank(message = "First name cannot be empty or blank")
+//	@NotBlank(message = "First name cannot be empty or blank")
+	@NotBlank(message = "Име е задължително.")
 	private String firstName;
 
-	@NotBlank(message = "Last name cannot be empty or blank")
+//	@NotBlank(message = "Last name cannot be empty or blank")
+	@NotBlank(message = "Фамилия е задължителна.")
 	private String lastName;
 
-	@ValidNotEmptyEgnOrForeignerPin
+	@ValidNotEmptyEgnOrForeignerPin(message = "Невалидно ЕГН или ЛНЧ.")
 	private String personalIdentificationNumber;
 
-	@NotBlank(message = "Address cannot be empty or blank")
+	// @NotBlank(message = "Address cannot be empty or blank")
+	@NotBlank(message = "Адрес е задължителен")
 	private String address;
 
-	@ValidNotEmptyPhoneNumber
+	@ValidNotEmptyPhoneNumber(
+			message = "Валиден телефонен номер може да съдържа само цифри, интервали и може да започва с \"+\".")
 	private String phoneNumber;
 
 	@Override

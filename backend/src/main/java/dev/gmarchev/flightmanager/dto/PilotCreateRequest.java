@@ -12,9 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PilotCreateRequest {
 
-	@NotBlank
+	@NotBlank(message = "Име е задължително.")
 	private String firstName;
 
-	@NotBlank
+	@NotBlank(message = "Фамилия е задължителна.")
 	private String lastName;
 }

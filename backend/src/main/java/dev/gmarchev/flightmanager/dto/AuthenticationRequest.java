@@ -12,9 +12,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AuthenticationRequest {
 
-	@NotBlank(message = "Username cannot be empty or blank")
+//	@NotBlank(message = "Username cannot be empty or blank")
+	@NotBlank(message = "Потребителско име е задължително.")
 	private String username;
 
-	@NotBlank(message = "Password cannot be empty or blank")
+//	@NotBlank(message = "Password cannot be empty or blank")
+	@NotBlank(message = "Парола е задължителна.")
 	private String password;
 }

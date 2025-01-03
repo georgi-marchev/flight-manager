@@ -8,6 +8,8 @@ import dev.gmarchev.flightmanager.dto.FlightPageItem;
 import dev.gmarchev.flightmanager.dto.FlightPassengerPageItem;
 import dev.gmarchev.flightmanager.dto.FlightResponse;
 import dev.gmarchev.flightmanager.dto.PageResponse;
+import dev.gmarchev.flightmanager.exceptions.EntityNotFoundException;
+import dev.gmarchev.flightmanager.exceptions.IvnalidFlightException;
 import dev.gmarchev.flightmanager.model.Airplane;
 import dev.gmarchev.flightmanager.model.Flight;
 import dev.gmarchev.flightmanager.model.Location;
@@ -43,12 +45,16 @@ public class FlightService {
 
 		if (flightCreateRequest.getFlightDepartureLocation() == flightCreateRequest.getFlightDestinationLocation()) {
 
-			new IllegalArgumentException("Departure and arrival locations cannot be the same!");
+			new IvnalidFlightException(
+					"Departure and arrival locations cannot be the same.",
+					"Време на излитане и кацане не могат да бъдат същите.");
 		}
 
 		if (!flightCreateRequest.getDepartureTime().isBefore(flightCreateRequest.getArrivalTime())) {
 
-			new IllegalArgumentException("Departure time must be before arrival time!");
+			new IvnalidFlightException(
+					"Departure time must be before arrival time.",
+					"Време на излитане трябва да е преди време на кацане.");
 		}
 
 		if (flightRepository.pilotOrPlaneAlreadyBooked(
@@ -57,21 +63,27 @@ public class FlightService {
 				flightCreateRequest.getDepartureTime(),
 				flightCreateRequest.getArrivalTime())) {
 
-			throw new IllegalArgumentException("Pilot or airplaine are not available for this time slot.");
+			throw new IvnalidFlightException(
+					"Pilot or airplaine are not available for this time slot.",
+					"Пилот или самолет не са налични за този времеви диапазон.");
 		}
 
 		// airplane and pilot cannot have overlapping flights
 		Location departureLocation = locationRepository.findById(flightCreateRequest.getFlightDepartureLocation())
-				.orElseThrow(() -> new IllegalArgumentException("Departure location cannot be found!"));
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Departure location cannot be found.", "Локацията за излитане не може да бъде открита."));
 
 		Location destinationLocation = locationRepository.findById(flightCreateRequest.getFlightDestinationLocation())
-				.orElseThrow(() -> new IllegalArgumentException("Destination location cannot be found!"));
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Destination location cannot be found.", "Локацията за кацане не може да бъде открита."));
 
 		Airplane airplane = airplaneRepository.findById(flightCreateRequest.getFlightAirplane())
-				.orElseThrow(() -> new IllegalArgumentException("Airplane cannot be found!"));
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Airplane cannot be found.", "Самолет не може да бъде открит."));
 
 		Pilot pilot = pilotRepository.findById(flightCreateRequest.getFlightPilot())
-				.orElseThrow(() -> new IllegalArgumentException("Pilot cannot be found!"));
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Pilot cannot be found.", "Пилот не може да бъде открит"));
 
 		Flight flight = Flight.builder()
 				.departureTime(flightCreateRequest.getDepartureTime())
@@ -126,7 +138,8 @@ public class FlightService {
 	public FlightResponse getFlightById(long flightId) {
 
 		Flight flight = flightRepository.findById(flightId)
-				.orElseThrow(() -> new IllegalArgumentException("Flight not found"));
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Flight not found.", "Полет не може да бъде открит."));
 
 		return new FlightResponse(
 				flight.getDepartureTime(),
@@ -140,7 +153,8 @@ public class FlightService {
 	public PageResponse<FlightPassengerPageItem> getReservationPassengersByFlightById(long flightId, int pageNumber, int pageSize) {
 
 		flightRepository.findById(flightId)
-				.orElseThrow(() -> new IllegalArgumentException("Flight not found"));
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Flight not found.", "Полет не може да бъде открит."));
 
 		Page<Passenger> page = passengerRepository
 				.findAllPassengersByFlightId(flightId, PageRequest.of(pageNumber, pageSize));

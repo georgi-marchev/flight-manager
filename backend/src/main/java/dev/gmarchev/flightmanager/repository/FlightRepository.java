@@ -2,7 +2,6 @@ package dev.gmarchev.flightmanager.repository;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 import dev.gmarchev.flightmanager.model.Flight;
 import org.springframework.data.domain.Page;
@@ -36,14 +35,14 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 	@Query("""
     SELECT f
     FROM Flight f
-    WHERE (:departureDate IS NULL OR CAST(f.departureTime AS DATE) = :departureDate) 
+    WHERE (:departureDate IS NULL OR CAST(f.departureTime AS DATE) = :departureDate)
     AND (
-    	:departureLocation IS NULL 
+    	:departureLocation IS NULL
     	OR LOWER(f.flightDepartureLocation.airportName) LIKE LOWER(CONCAT('%', :departureLocation, '%'))
     	OR LOWER(f.flightDepartureLocation.city) LIKE LOWER(CONCAT('%', :departureLocation, '%'))
-    	OR LOWER(f.flightDepartureLocation.country) LIKE LOWER(CONCAT('%', :departureLocation, '%'))) 
+    	OR LOWER(f.flightDepartureLocation.country) LIKE LOWER(CONCAT('%', :departureLocation, '%')))
     AND (
-    	:destinationLocation IS NULL 
+    	:destinationLocation IS NULL
     	OR LOWER(f.flightDestinationLocation.airportName) LIKE LOWER(CONCAT('%', :destinationLocation, '%'))
     	OR LOWER(f.flightDestinationLocation.city) LIKE LOWER(CONCAT('%', :destinationLocation, '%'))
     	OR LOWER(f.flightDestinationLocation.country) LIKE LOWER(CONCAT('%', :destinationLocation, '%')))

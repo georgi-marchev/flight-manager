@@ -18,25 +18,28 @@ import lombok.Setter;
 @Setter
 public class ReservationRequestPassenger {
 
-	@NotBlank(message = "First name cannot be empty or blank")
+//	@NotBlank(message = "First name cannot be empty or blank")
+	@NotBlank(message = "Име е задължително.")
 	private String firstName;
 
-	@NotBlank(message = "Middle name cannot be empty or blank")
+//	@NotBlank(message = "Middle name cannot be empty or blank")
+	@NotBlank(message = "Презиме е задължително.")
 	private String middleName;
 
-	// TODO: Will not work for foreigners without middle name
-	@NotBlank(message = "Last name cannot be empty or blank")
+//	@NotBlank(message = "Last name cannot be empty or blank")
+	@NotBlank(message = "Фамилия е задължителна.")
 	private String lastName;
 
-	@ValidNotEmptyEgnOrForeignerPin
+	@ValidNotEmptyEgnOrForeignerPin(message = "Невалидно ЕГН или ЛНЧ.")
 	private String personalIdentificationNumber;
 
-	@ValidNotEmptyPhoneNumber
+	@ValidNotEmptyPhoneNumber(
+			message = "Валиден телефонен номер може да съдържа само цифри, интервали и може да започва с \"+\".")
 	private String phoneNumber;
 
-	@NotBlank
+	@NotBlank(message = "Националност е задължителна.")
 	private String nationality;
 
-	@NotNull
+	@NotNull(message = "Вид на място е задължително.")
 	private SeatType seatType;
 }

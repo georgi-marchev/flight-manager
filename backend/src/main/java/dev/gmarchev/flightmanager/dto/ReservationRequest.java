@@ -17,14 +17,14 @@ import lombok.Setter;
 @Setter
 public class ReservationRequest {
 
-	@Min(1)
+	@Min(value = 1, message = "Невалиден идентификатор на полет.")
 	private long flightId;
 
-	@NotEmpty(message = "Email cannot be empty")
-	@Email(message = "Email is not valid")
+	@NotEmpty(message = "Имейл е задължителен.")
+	@Email(message = "Невалиден формат на имейл.")
 	private String contactEmail;
 
-	@NotEmpty
+	@NotEmpty(message = "Списък с пътници е задължителен.")
 	@Valid
 	private List<ReservationRequestPassenger> passengers;
 }

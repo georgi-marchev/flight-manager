@@ -2,9 +2,9 @@ package dev.gmarchev.flightmanager.controller;
 
 import java.util.List;
 
-import dev.gmarchev.flightmanager.dto.PilotCreateRequest;
-import dev.gmarchev.flightmanager.dto.PilotResponse;
-import dev.gmarchev.flightmanager.service.PilotService;
+import dev.gmarchev.flightmanager.dto.AirplaneCreateRequest;
+import dev.gmarchev.flightmanager.dto.AirplaneResponse;
+import dev.gmarchev.flightmanager.service.AirplaneService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,25 +16,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/pilots")
+@RequestMapping("/airplanes")
 @RequiredArgsConstructor
-public class PilotController {
+public class AirplaneController {
 
-	private final PilotService pilotService;
+	private final AirplaneService airplaneService;
 
 	@GetMapping
-	public ResponseEntity<List<PilotResponse>> getPilots() {
+	public ResponseEntity<List<AirplaneResponse>> getAirplanes() {
 
-		return ResponseEntity.ok(pilotService.getPilots());
+		return ResponseEntity.ok(airplaneService.getAirplanes());
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody @Valid PilotCreateRequest pilotCreateRequest) {
+	public ResponseEntity<Object> createAirplane(@RequestBody @Valid AirplaneCreateRequest airplaneCreateRequest) {
 
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
 				.body(new Object() {
-					public final Long pilotId = pilotService.createPilot(pilotCreateRequest);
+					public final Long airplaneId = airplaneService.createAirplane(airplaneCreateRequest);
 				});
 	}
 }

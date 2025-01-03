@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import dev.gmarchev.flightmanager.dto.AccountPageItem;
 import dev.gmarchev.flightmanager.dto.PageResponse;
 import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
+import dev.gmarchev.flightmanager.exceptions.EntityNotFoundException;
 import dev.gmarchev.flightmanager.model.Account;
 import dev.gmarchev.flightmanager.model.Role;
 import dev.gmarchev.flightmanager.model.RoleType;
@@ -39,7 +40,10 @@ public class AccountService {
 	public Account createAccount(AccountCreateRequest accountCreateRequest, RoleType roleType) {
 
 		Role role = roleRepository.findByName(roleType)
-				.orElseThrow(() -> new IllegalStateException(String.format("Role %s is missing")));
+				.orElseThrow(() -> new EntityNotFoundException(
+						String.format(
+								"Role with name %s was not found in the database", roleType),
+						"Роля не може да бъде намерена."));
 
 		Account account = Account.builder()
 				.username(accountCreateRequest.getUsername())

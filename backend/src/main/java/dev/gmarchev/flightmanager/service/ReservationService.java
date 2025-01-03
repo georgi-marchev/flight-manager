@@ -10,6 +10,7 @@ import dev.gmarchev.flightmanager.dto.ReservationPageItem;
 import dev.gmarchev.flightmanager.dto.ReservationPassengerResponse;
 import dev.gmarchev.flightmanager.dto.ReservationRequest;
 import dev.gmarchev.flightmanager.dto.ReservationResponse;
+import dev.gmarchev.flightmanager.exceptions.EntityNotFoundException;
 import dev.gmarchev.flightmanager.exceptions.InsufficientSeatsException;
 import dev.gmarchev.flightmanager.model.Flight;
 import dev.gmarchev.flightmanager.model.Passenger;
@@ -60,7 +61,10 @@ public class ReservationService {
 		// OptimisticLockingFailureException is thrown, the method will retry to make the reservation until exhausting
 		// the retry maxAttempts.
 		Flight flight = flightRepository.findById(reservationRequest.getFlightId())
-				.orElseThrow(() -> new IllegalArgumentException("Flight cannot be found!"));
+				.orElseThrow(() -> new EntityNotFoundException(
+						String.format(
+								"Flight with ID %d was not found in the database", reservationRequest.getFlightId()),
+						"Полет не може да бъде намерен."));
 
 		int economySeatsToBook = 0;
 		int businessSeatsToBook = 0;

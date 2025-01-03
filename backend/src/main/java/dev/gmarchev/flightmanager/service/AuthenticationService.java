@@ -5,13 +5,13 @@ import java.util.stream.Collectors;
 import dev.gmarchev.flightmanager.dto.AuthenticationRequest;
 import dev.gmarchev.flightmanager.dto.AuthenticationResponse;
 import dev.gmarchev.flightmanager.dto.RefreshTokenRequest;
-import dev.gmarchev.flightmanager.exceptions.UnauthenticatedException;
 import dev.gmarchev.flightmanager.model.Account;
 import dev.gmarchev.flightmanager.repository.AccountRepository;
 import dev.gmarchev.flightmanager.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,8 +29,7 @@ public class AuthenticationService {
 
 	private final JwtService jwtService;
 
-	public AuthenticationResponse getAuthenticationResponse(AuthenticationRequest authenticationRequest)
-			throws UnauthenticatedException {
+	public AuthenticationResponse getAuthenticationResponse(AuthenticationRequest authenticationRequest) {
 
 		String username = authenticationRequest.getUsername();
 
@@ -42,7 +41,7 @@ public class AuthenticationService {
 
 		if (!authentication.isAuthenticated()) {
 
-			throw new UnauthenticatedException("User cannot be authenticated");
+			throw new BadCredentialsException("User cannot be authenticated");
 		}
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -57,13 +56,12 @@ public class AuthenticationService {
 						.toList());
 	}
 
-	public AuthenticationResponse getAuthenticationResponse(RefreshTokenRequest refreshTokenRequest)
-			throws UnauthenticatedException {
+	public AuthenticationResponse getAuthenticationResponse(RefreshTokenRequest refreshTokenRequest) {
 
 		String username = jwtService.extractUsername(refreshTokenRequest.getRefreshToken());
 
 		Account account = accountRepository.findByUsername(username)
-				.orElseThrow(() -> new UnauthenticatedException("Could not load user"));
+				.orElseThrow(() -> new BadCredentialsException("Could not load user"));
 
 		return new AuthenticationResponse(
 				jwtService.generateAccessToken(username),

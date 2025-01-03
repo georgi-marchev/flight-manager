@@ -2,9 +2,9 @@ package dev.gmarchev.flightmanager.controller;
 
 import java.util.List;
 
-import dev.gmarchev.flightmanager.dto.PilotCreateRequest;
-import dev.gmarchev.flightmanager.dto.PilotResponse;
-import dev.gmarchev.flightmanager.service.PilotService;
+import dev.gmarchev.flightmanager.dto.LocationCreateRequest;
+import dev.gmarchev.flightmanager.dto.LocationResponse;
+import dev.gmarchev.flightmanager.service.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,25 +16,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/pilots")
+@RequestMapping("/locations")
 @RequiredArgsConstructor
-public class PilotController {
+public class LocationController {
 
-	private final PilotService pilotService;
+	private final LocationService locationService;
 
 	@GetMapping
-	public ResponseEntity<List<PilotResponse>> getPilots() {
+	public ResponseEntity<List<LocationResponse>> getPilots() {
 
-		return ResponseEntity.ok(pilotService.getPilots());
+		return ResponseEntity.ok(locationService.getLocations());
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody @Valid PilotCreateRequest pilotCreateRequest) {
+	public ResponseEntity<Object> create(@RequestBody @Valid LocationCreateRequest locationCreateRequest) {
 
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
 				.body(new Object() {
-					public final Long pilotId = pilotService.createPilot(pilotCreateRequest);
+					public final Long locationId = locationService.createLocation(locationCreateRequest);
 				});
 	}
 }

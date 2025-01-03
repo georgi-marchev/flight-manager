@@ -5,10 +5,8 @@ import java.util.stream.Collectors;
 
 import dev.gmarchev.flightmanager.model.Account;
 import dev.gmarchev.flightmanager.repository.AccountRepository;
-import dev.gmarchev.flightmanager.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
