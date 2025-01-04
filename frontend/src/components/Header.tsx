@@ -16,12 +16,11 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Link className="nav-link" to="/">Home</Link>
-                        <Link className="nav-link" to="/flights">Flights</Link>
+                        <Link className="nav-link" to="/">Полети</Link>
+                        {!isAmind || <Link className="nav-link" to="/flights/create">Създаване на полет</Link>}
                         {!isLoggedIn || <Link className="nav-link" to="/reservations">Резервации</Link>}
-                        {isAmind && (
-                            <Link className="nav-link" to="/employees">Служители</Link>
-                        )}
+                        {!isAmind || <Link className="nav-link" to="/employees">Служители</Link>}
+                        {!isAmind || <Link className="nav-link" to="/employees/create">Създаване на служител</Link>}
                     </Nav>
                 </Navbar.Collapse>
                 {!isLoggedIn 

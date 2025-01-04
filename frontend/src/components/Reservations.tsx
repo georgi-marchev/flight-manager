@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import useAuthenticatedApiClient from '../hooks/useAuthenticatedApiClient';
 import Pagination from './Pagination';
-import { Alert, Col, Container, Form, Row, Card, ListGroup } from 'react-bootstrap';
+import { Alert, Col, Container, Form, Row, Card, ListGroup, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 
 const PAGE_SIZES = [10, 25, 50];
@@ -16,7 +16,7 @@ interface Reservation {
 const Reservations = () => {
     const [reservations, setReservations] = useState([]);
     const authenticatedClient = useAuthenticatedApiClient();
-
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(PAGE_SIZES[0]);
     const [hasNext, setHasNext] = useState(false);
@@ -25,8 +25,12 @@ const Reservations = () => {
     });
     const [errorMessage, setErrorMessage] = useState('');
 
-    useEffect(() => {     
+    useEffect(() => {
+        
         const fetchReservations = async () => {
+
+
+            setIsLoading(true);
 
             try {
                 const response = await authenticatedClient.get('/reservations', {
@@ -36,15 +40,15 @@ const Reservations = () => {
                         size: size
                     }
                 });
-
                 const data = response.data;
                 setReservations(data.content);
                 setHasNext(data.hasNext);
-
             } catch (err) {
                 console.log(err);
                 setErrorMessage('Вмомента не може да бъде показана информация за резервациите. Моля, опитайте отново!')
-            };
+            } finally {
+                setIsLoading(false);
+            }
         };
     
         fetchReservations();
@@ -79,6 +83,7 @@ const Reservations = () => {
         <main className="bg-light py-5">
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
+                
                 <header className="mb-4 mt-3">
                     <h1 className="text-center text-primary">Резервации</h1>
                 </header>
@@ -112,6 +117,16 @@ const Reservations = () => {
                     </Form>
                 </section>
                 <section aria-labelledby="reservations-list">
+                    
+                    {isLoading && (
+                        <div className="text-center">
+                            <Spinner animation="border" role="status" />
+                        </div>
+                    )}
+                
+                    {(reservations?.length === 0 && !isLoading) ? (
+                        <Alert variant="primary">Няма резервации</Alert>
+                    ) : (
                     <Row xs={1} sm={2} md={3} lg={4} className="g-4">
                         {reservations.map((res: Reservation) => (
                             <Col key={res.id}>
@@ -124,7 +139,14 @@ const Reservations = () => {
                                             <ListGroup.Item className="d-flex justify-content-between">
                                                 Имейл: <span className="ms-3"><a href={`mailto:${res.contactEmail}`} className="link-primary"> {res.contactEmail}</a></span>
                                             </ListGroup.Item>
-                                            <ListGroup.Item className="d-flex justify-content-center">
+                                            <ListGroup.Item className="d-flex justify-content-between">
+                                                
+                                                <Link
+                                                    to={`/reservations/${res.id}`}
+                                                    className="btn btn-outline-primary text-decoration-none"
+                                                >
+                                                    Виж детайли
+                                                </Link>
                                                 <Link
                                                     to={`/flights/${res.reservationFlight}`}
                                                     className="btn btn-outline-primary text-decoration-none"
@@ -132,20 +154,14 @@ const Reservations = () => {
                                                     Виж полет
                                                 </Link>
                                             </ListGroup.Item>
-                                            <ListGroup.Item className="d-flex justify-content-center">
-                                                <Link
-                                                    to={`/reservations/${res.id}`}
-                                                    className="btn btn-outline-primary text-decoration-none"
-                                                >
-                                                    Виж детайли
-                                                </Link>
-                                            </ListGroup.Item>
+                                            
                                         </ListGroup>
                                     </Card.Body>
                                 </Card>
                             </Col>
                         ))}
                     </Row>
+                    )}
                 </section>
                 <section>
                     <Pagination 

@@ -45,8 +45,8 @@ const Employees = () => {
                 setEmployees(data.content);
                 setHasNext(data.hasNext);
 
-            } catch (err) {
-                console.log(err);
+            } catch (error) {
+                const errorMessage = error.response.data.message || 'Грешка при създаване на резервация';
                 setErrorMessage('Вмомента не може да бъде показана информация за служителите. Опитайте отново!')
             };
         };
