@@ -2,6 +2,7 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
+import Home from './components/Home.tsx';
 import Flights from './components/Flights';
 import CreateReservation from './components/CreateReservation';
 import Missing from './components/Missing';
@@ -20,7 +21,8 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route path='login' element={<Login />} />
-                <Route index element={<Flights />} />
+                <Route index element={<Home />} />
+                <Route path="/flights" element={<Flights />} />
                 
                 <Route element={<RequireAuthentication />}>
                     <Route path="/reservations" element={<Reservations />} />
@@ -32,7 +34,6 @@ function App() {
                         <Route path="/flights/create" element={<CreateFlight />} />
                     </Route>
                 </Route>
-                
                 <Route path="/flights/:id/create-reservation" element={<CreateReservation />} />
                 <Route path="*" element={<Missing />} />
             </Route>

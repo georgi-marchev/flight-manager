@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Navbar, Nav, Modal, Button } from 'react-bootstrap';
+import { useState } from 'react';
+import { Nav, Modal, Button } from 'react-bootstrap';
 import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,8 +28,8 @@ const CurrentUser = () => {
     return (
         <>
             <Nav.Item>
-                <Button variant="link" onClick={handleShowModal} className="text-dark">
-                {auth.username}
+                <Button variant="link" onClick={handleShowModal} className="text-white">
+                    {auth.username}
                 </Button>
             </Nav.Item>
             <Modal show={showModal} onHide={handleCloseModal} className='align-items-center justify-content-center text-center'>

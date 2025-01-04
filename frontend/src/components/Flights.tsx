@@ -32,11 +32,6 @@ const Flights = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
-
-        console.log(new Date().toISOString().split('T')[0]);
-        const date = new Date();
-        const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-        console.log(localDate);
         
         const fetchFlights = async () => {
             
@@ -182,7 +177,7 @@ const Flights = () => {
                                 <Card.Text>
                                     {formatDateTime(flight.departureTime)} - {formatDateTime(flight.arrivalTime)}
                                 </Card.Text>
-                                <Link to={`flights/${flight.id}/create-reservation`}  className="btn btn-outline-primary">Резервирай</Link>
+                                <Link to={`${flight.id}/create-reservation`}  className="btn btn-outline-primary">Резервирай</Link>
                             </Card.Body>
                             </Card>
                         </Col>

@@ -142,7 +142,7 @@ const Reservations = () => {
                                             <ListGroup.Item className="d-flex justify-content-between">
                                                 
                                                 <Link
-                                                    to={`/reservations/${res.id}`}
+                                                    to={`${res.id}`}
                                                     className="btn btn-outline-primary text-decoration-none"
                                                 >
                                                     Виж детайли
