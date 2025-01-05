@@ -36,6 +36,8 @@ public class ReservationService {
 
 	private final ReservationRepository reservationRepository;
 
+	private final ReservationNotificationService reservationNotificationService;
+
 	public PageResponse<ReservationPageItem> getReservations(
 			@Nullable String contactEmail, int pageNumber, int pageSize) {
 
@@ -120,6 +122,13 @@ public class ReservationService {
 
 		reservationRepository.save(reservation);
 		flightRepository.save(flight);
+
+		notifyCustomer(reservation);
+	}
+
+	private void notifyCustomer(Reservation reservation) {
+
+		reservationNotificationService.sendCompletedReservationMessage(reservation);
 	}
 
 	public Optional<ReservationResponse> findById(Long id) {

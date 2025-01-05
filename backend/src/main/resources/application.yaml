@@ -70,3 +70,23 @@ accounts:
     personal-identification-number: 111111111
     address: 5861 Arctic Blvd, Anchorage, Alaska 99518
     phone-number: 123456789
+
+---
+
+spring:
+  mail:
+    host: smtp.mailersend.net
+    port: 587
+    username:
+    password:
+    from:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    reservation:
+      subject: "Потвърждение за резервация"
+      body-template: "Потвърдена резервация за полет от {from} за {to} на {departureTime} за пътници на борй: {passengerCount}."
