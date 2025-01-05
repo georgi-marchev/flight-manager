@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { apiClient } from '../api/apiClient';
 import { formatDateTime } from '../utils/dateHelper';
-import { Alert, Col, Container, Form, Row, Card } from 'react-bootstrap';
+import { Alert, Col, Container, Form, Row, Card, Spinner, ListGroup } from 'react-bootstrap';
 import Pagination from './Pagination';
 import { Link } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
+import { getErrorMessageOrDefault } from '../utils/responseUtil';
 
 const PAGE_SIZES = [10, 25, 50];
 
@@ -30,11 +32,14 @@ const Flights = () => {
         availableSeatsBusiness: ''
     });
     const [errorMessage, setErrorMessage] = useState('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const { auth } = useAuth();
+    const isLoggedIn = Boolean(auth && auth.accessToken);
 
     useEffect(() => {
-        
         const fetchFlights = async () => {
-            
+            setIsLoading(true);
             try {
                 const response = await apiClient.get('/flights', {
                     params: {
@@ -43,14 +48,12 @@ const Flights = () => {
                         size: size
                     }
                 });
-
-                const data = response.data;
-                setFlights(data.content);
-                setHasNext(data.hasNext);
-
+                setFlights(response.data.content);
+                setHasNext(response.data.hasNext);
             } catch (err) {
-                console.log(err);
-                setErrorMessage('Вмомента не може да бъде показана информация за полетите. Опитайте отново!')
+                setErrorMessage(getErrorMessageOrDefault(err, 'Вмомента не може да бъде показана информация за полетите. Опитайте отново!'));
+            } finally {
+                setIsLoading(false);
             };
         };
 
@@ -86,9 +89,12 @@ const Flights = () => {
         <main className="bg-light py-5">
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
-                <header className="mb-4 mt-3">
-                    <h1 className="text-center text-primary">Полети</h1>
-                </header>
+                <h1 className="text-center text-primary">Полети</h1>
+                {isLoading && (
+                    <div className="text-center">
+                        <Spinner animation="border" role="status" />
+                    </div>
+                )}
                 <section className='mb-5'>
                     <Form>
                         <Row className="mb-3">
@@ -177,7 +183,14 @@ const Flights = () => {
                                 <Card.Text>
                                     {formatDateTime(flight.departureTime)} - {formatDateTime(flight.arrivalTime)}
                                 </Card.Text>
-                                <Link to={`${flight.id}/create-reservation`}  className="btn btn-outline-primary">Резервирай</Link>
+                                <ListGroup variant="flush">
+                                    <ListGroup.Item className="d-flex justify-content-center">
+                                        <Link to={`${flight.id}/create-reservation`}  className="btn btn-outline-primary me-2">Резервирай</Link>
+                                        {isLoggedIn && <Link to={`${flight.id}`}  className="btn btn-outline-primary">Виж полет</Link>}
+                                    </ListGroup.Item>
+                                </ListGroup>
+                                
+
                             </Card.Body>
                             </Card>
                         </Col>

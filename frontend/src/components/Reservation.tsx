@@ -1,7 +1,8 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAuthenticatedApiClient from "../hooks/useAuthenticatedApiClient";
-import { Alert, Card, ListGroup, Container, Row, Col } from 'react-bootstrap';
+import { Alert, Card, ListGroup, Container, Row, Col, Spinner } from 'react-bootstrap';
+import { getErrorMessageOrDefault } from "../utils/responseUtil";
 
 interface Passenger {
     firstName: string;
@@ -30,29 +31,22 @@ const Reservation = () => {
     const authenticatedClient = useAuthenticatedApiClient();
     const [reservation, setReservation] = useState<Reservation | null>(null);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-
         const fetchReservation = async () => {
+            setIsLoading(true);
             try {
                 const response = await authenticatedClient.get(`/reservations/${id}`);
-                isMounted && setReservation(response.data);
+                setReservation(response.data);
             } catch (err) {
-                if (isMounted) {
-                    console.log(err);
-                    setErrorMessage('Error fetching reservation details.');
-                }
+                setErrorMessage(getErrorMessageOrDefault(err, 'Error fetching reservation details.'));
+            } finally {
+                setIsLoading(false);
             };
         };
 
         fetchReservation();
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        }
     }, [id]);
 
     return (
@@ -60,6 +54,11 @@ const Reservation = () => {
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
             <Container>
+                {isLoading && (
+                    <div className="text-center">
+                        <Spinner animation="border" role="status" />
+                    </div>
+                )}
                 <section className="mb-5" aria-labelledby="reservation">
                     <header>
                         <Card className="mt-3 shadow-sm bg-white rounded d-flex flex-column align-items-center justify-content-center text-center">

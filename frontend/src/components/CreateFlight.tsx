@@ -3,10 +3,31 @@ import { Button, Form, Col, Row, Container, Alert, Spinner } from "react-bootstr
 import useAuthenticatedApiClient from "../hooks/useAuthenticatedApiClient";
 import { getErrorMessageOrDefault } from "../utils/responseUtil";
 
+interface Location {
+    id: number;
+    airportName: string;
+    city: string;
+    country: string;
+}
+
+interface Airplane {
+    id: number;
+    serialNumber: string;
+    modelNumber: string;
+    capacityEconomy: number;
+    capacityBusiness: number;
+}
+
+interface Pilot {
+    id: number;
+    firstName: string;
+    lastName: string;
+}
+
 const CreateFlight = () => {
-    const [pilots, setPilots] = useState([]);
-    const [airplanes, setAirplanes] = useState([]);
-    const [locations, setLocations] = useState([]);
+    const [pilots, setPilots] = useState<Pilot[]>([]);
+    const [airplanes, setAirplanes] = useState<Airplane[]>([]);
+    const [locations, setLocations] = useState<Location[]>([]);
     const [loading, setLoading] = useState(true); 
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [flightData, setFlightData] = useState({
@@ -33,29 +54,26 @@ const CreateFlight = () => {
 
                 const locationsResponse = await authenticatedApiClient.get("/locations");
                 setLocations(locationsResponse.data);
-
-                setLoading(false);
             } catch (error) {
                 setErrorMessage(getErrorMessageOrDefault(error, "Грешка при изтегляне на данни. Моля опитайте отново!"));
-                console.log(error);
+            } finally {
                 setLoading(false);
-            }
+            };
         };
-
         fetchData();
     }, []);
 
-    const handleInputChange = (event) => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFlightData({ ...flightData, [name]: value });
     };
 
-    const formatDateWithTimeZone = (dateStr) => {
+    const formatDateWithTimeZone = (dateStr: string) => {
         const date = new Date(dateStr);
         return date.toISOString(); // This will include the 'Z' suffix for UTC
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
         setErrorMessage('');

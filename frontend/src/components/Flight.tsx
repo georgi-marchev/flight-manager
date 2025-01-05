@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Alert, Container, Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
+import { Alert, Container, Card, Col, Form, ListGroup, Row, Spinner } from 'react-bootstrap';
 import { apiClient } from '../api/apiClient';
 import useAuthenticatedApiClient from '../hooks/useAuthenticatedApiClient';
 import { formatDateTime, getDuration } from '../utils/dateHelper';
 import { Link } from 'react-router-dom';
 import Pagination from './Pagination';
+import { getErrorMessageOrDefault } from '../utils/responseUtil';
 
 const PAGE_SIZES = [10, 25, 50];
 
@@ -31,7 +32,6 @@ interface Passenger {
 const Flight = () => {
 
     const { id } = useParams<{ id: string }>();
-    
     const [flight, setFlight] = useState<Flight | null>(null);
     const [passengers, setPassengers] = useState<Passenger[]>([]);
     const [page, setPage] = useState(0);
@@ -39,12 +39,11 @@ const Flight = () => {
     const [hasNext, setHasNext] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const authenticatedApiClient = useAuthenticatedApiClient();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-
         const fetchFlight = async () => {
+            setIsLoading(true);
             try {
                 const flightResponse = await apiClient.get(`/flights/${id}`);
                 const passengerResponse = await authenticatedApiClient.get(`/flights/${id}/passengers`, {
@@ -53,28 +52,17 @@ const Flight = () => {
                         size: size
                     }
                 });
-               
-                console.log(passengerResponse);
-
-                if (isMounted) {
-                    setFlight(flightResponse.data);
-                    setPassengers(passengerResponse.data.content);
-                    setHasNext(passengerResponse.data.hasNext);
-                }
+                setFlight(flightResponse.data);
+                setPassengers(passengerResponse.data.content);
+                setHasNext(passengerResponse.data.hasNext);
             } catch (err) {
-                if (isMounted) {
-                    console.log(err);
-                    setErrorMessage('Error fetching flight details.');
-                }
+                setErrorMessage(getErrorMessageOrDefault(err, 'Грешка при сваляне на данни.'));
+            } finally {
+                setIsLoading(false);
             };
         };
 
         fetchFlight();
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        }
     }, [id, page, size]);
 
     const handleNextPage = () => {
@@ -99,6 +87,11 @@ const Flight = () => {
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             {!flight ||
                 <Container>
+                    {isLoading && (
+                        <div className="text-center">
+                            <Spinner animation="border" role="status" />
+                        </div>
+                    )}
                     <section className='mt-5 mb-3'>
                         <h2 className="text-center text-primary mb-4">Полет</h2>
                         <Card className="shadow-sm d-flex flex-column align-items-center justify-content-center text-center">

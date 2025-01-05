@@ -3,6 +3,7 @@ import useAuthenticatedApiClient from '../hooks/useAuthenticatedApiClient';
 import Pagination from './Pagination';
 import { Alert, Col, Container, Form, Row, Card, ListGroup, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
+import { getErrorMessageOrDefault } from '../utils/responseUtil';
 
 const PAGE_SIZES = [10, 25, 50];
 
@@ -28,10 +29,7 @@ const Reservations = () => {
     useEffect(() => {
         
         const fetchReservations = async () => {
-
-
             setIsLoading(true);
-
             try {
                 const response = await authenticatedClient.get('/reservations', {
                     params: {
@@ -45,7 +43,7 @@ const Reservations = () => {
                 setHasNext(data.hasNext);
             } catch (err) {
                 console.log(err);
-                setErrorMessage('Вмомента не може да бъде показана информация за резервациите. Моля, опитайте отново!')
+                setErrorMessage(getErrorMessageOrDefault(err, 'Вмомента не може да бъде показана информация за резервациите. Моля, опитайте отново!'));
             } finally {
                 setIsLoading(false);
             }
@@ -83,10 +81,12 @@ const Reservations = () => {
         <main className="bg-light py-5">
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
-                
-                <header className="mb-4 mt-3">
-                    <h1 className="text-center text-primary">Резервации</h1>
-                </header>
+                <h1 className="text-center text-primary">Резервации</h1>
+                {isLoading && (
+                    <div className="text-center">
+                        <Spinner animation="border" role="status" />
+                    </div>
+                )}
                 <section>
                     <Form>
                         <Row className="mb-3">
@@ -136,14 +136,13 @@ const Reservations = () => {
                                             <h2><strong>Резервация {res.id}</strong></h2>
                                         </Card.Title>
                                         <ListGroup variant="flush">
-                                            <ListGroup.Item className="d-flex justify-content-between">
+                                            <ListGroup.Item className="d-flex justify-content-center">
                                                 Имейл: <span className="ms-3"><a href={`mailto:${res.contactEmail}`} className="link-primary"> {res.contactEmail}</a></span>
                                             </ListGroup.Item>
-                                            <ListGroup.Item className="d-flex justify-content-between">
-                                                
+                                            <ListGroup.Item className="d-flex justify-content-center">
                                                 <Link
                                                     to={`${res.id}`}
-                                                    className="btn btn-outline-primary text-decoration-none"
+                                                    className="btn btn-outline-primary text-decoration-none me-2"
                                                 >
                                                     Виж детайли
                                                 </Link>

@@ -1,14 +1,30 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, ReactNode } from "react";
 
 const ACCESS_TOKEN_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
 const AUTHORITIES_KEY = 'authorities';
 const USERNAME_KEY = 'username';
 
-const AuthContext = createContext({});
+export interface AuthState {
+    accessToken: string | null;
+    refreshToken: string | null;
+    authorities: string[];
+    username: string | null;
+}
+  
+export interface AuthContextType {
+    auth: AuthState;
+    setAuth: React.Dispatch<React.SetStateAction<AuthState>>;
+}
+  
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+  
+interface AuthProviderProps {
+    children: ReactNode;
+}
 
-export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState(() => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+    const [auth, setAuth] = useState<AuthState>(() => {
 
         const authorities = localStorage.getItem(AUTHORITIES_KEY);
         return {

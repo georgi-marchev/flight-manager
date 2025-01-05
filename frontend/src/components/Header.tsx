@@ -33,10 +33,10 @@ const Header = () => {
                                         drop="down"
                                         className={isDropdownActive('/flights') ? 'active' : ''}
                                     >
-                                        <NavDropdown.Item>
+                                        <NavDropdown.Item as="div">
                                             <NavLink to="/flights" className='nav-link' end>Списък с полети</NavLink>
                                         </NavDropdown.Item>
-                                        <NavDropdown.Item>
+                                        <NavDropdown.Item as="div">
                                             <NavLink to="/flights/create" className='nav-link'>Създаване на полет</NavLink>
                                         </NavDropdown.Item>
                                     </NavDropdown>
@@ -47,10 +47,10 @@ const Header = () => {
                                         drop="down"
                                         className={isDropdownActive('/employees') ? 'active' : ''}
                                     >
-                                        <NavDropdown.Item>
+                                        <NavDropdown.Item as="div">
                                             <NavLink to="/employees" className='nav-link' end>Списък със служители</NavLink>
                                         </NavDropdown.Item>
-                                        <NavDropdown.Item>
+                                        <NavDropdown.Item as="div">
                                             <NavLink to="/employees/create" className='nav-link'>Създаване на служител</NavLink>
                                         </NavDropdown.Item>
                                     </NavDropdown>

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import useAuthenticatedApiClient from '../hooks/useAuthenticatedApiClient';
 import Pagination from './Pagination';
-import { Alert, Col, Container, Form, Row, Card, ListGroup } from 'react-bootstrap';
+import { Alert, Col, Container, Form, Row, Card, ListGroup, Spinner } from 'react-bootstrap';
+import { getErrorMessageOrDefault } from '../utils/responseUtil';
 
 const PAGE_SIZES = [10, 25, 50];
 
@@ -14,10 +15,9 @@ interface Employee {
 }
 
 const Employees = () => {
-
     const [employees, setEmployees] = useState([]);
     const authenticatedClient = useAuthenticatedApiClient();
-
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(PAGE_SIZES[0]);
     const [hasNext, setHasNext] = useState(false);
@@ -31,7 +31,7 @@ const Employees = () => {
 
     useEffect(() => {     
         const fetchEmployees = async () => {
-
+            setIsLoading(true);
             try {
                 const response = await authenticatedClient.get('/employee-accounts', {
                     params: {
@@ -40,14 +40,13 @@ const Employees = () => {
                         size: size
                     }
                 });
-
-                const data = response.data;
-                setEmployees(data.content);
-                setHasNext(data.hasNext);
+                setEmployees(response.data.content);
+                setHasNext(response.data.hasNext);
 
             } catch (error) {
-                const errorMessage = error.response.data.message || 'Грешка при създаване на резервация';
-                setErrorMessage('Вмомента не може да бъде показана информация за служителите. Опитайте отново!')
+                setErrorMessage(getErrorMessageOrDefault(error, 'Вмомента не може да бъде показана информация за служителите. Опитайте отново!'));
+            } finally {
+                setIsLoading(false);
             };
         };
     
@@ -67,8 +66,8 @@ const Employees = () => {
     };
 
     const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setSize(Number(event.target.value)); // Update page size and reset to first page
-        setPage(0); // Reset page to 0 when page size changes
+        setSize(Number(event.target.value));
+        setPage(0);
     };
 
     const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -83,9 +82,12 @@ const Employees = () => {
         <main className="bg-light py-5">
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
-                 <header className="mb-4 mt-3">
-                    <h1 className="text-center text-primary">Служители</h1>
-                </header>
+                <h1 className="text-center text-primary">Служители</h1>
+                {isLoading && (
+                    <div className="text-center">
+                        <Spinner animation="border" role="status" />
+                    </div>
+                )}
                 <section>
                     <Form>
                         <Row className="mb-3">

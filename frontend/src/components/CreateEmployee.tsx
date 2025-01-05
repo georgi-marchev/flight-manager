@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Form, Button, Alert, Spinner, Container, Row, Col } from 'react-bootstrap';
 import useAuthenticatedApiClient from '../hooks/useAuthenticatedApiClient';
 import { getErrorMessageOrDefault } from '../utils/responseUtil';
@@ -25,26 +25,25 @@ const CreateEmployee = () => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [loading, setLoading] = useState(false);
 
-    const handleInputChange = (event) => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setEmployeeData({ ...employeeData, [name]: value });
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
         setErrorMessage('');
-        
         try {
             await authenticatedApiClient.post('/employee-accounts', employeeData);
-            alert('СЛужител създаден успешно!');
+            alert('Служител създаден успешно!');
             setEmployeeData(createEmptyEmployeeObj());
         } catch (err) {
             setErrorMessage(getErrorMessageOrDefault(err, 'Грешка при създаване на служител.'));
             window.scrollTo(0, 0)
         } finally {
             setLoading(false);
-        }
+        };
     };
 
     return (

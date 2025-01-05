@@ -54,27 +54,18 @@ const CreateReservation = () => {
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-
+        setIsLoading(true);
         const fetchFlight = async () => {
             try {
                 const response = await apiClient.get(`/flights/${id}`);
-                isMounted && setFlight(response.data);
+                setFlight(response.data);
             } catch (err) {
-                if (isMounted) {
-                    console.log(err);
-                    setErrorMessage(getErrorMessageOrDefault(err, 'Не може да бъде свалена информация за полет. Моля опитайте отново!'));
-                }
+                setErrorMessage(getErrorMessageOrDefault(err, 'Не може да бъде свалена информация за полет. Моля опитайте отново!'));
+            } finally {
+                setIsLoading(false);
             };
         };
-
         fetchFlight();
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        }
     }, [id]);
 
     const handlePassengerChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,13 +89,11 @@ const CreateReservation = () => {
         event.preventDefault();
         setIsLoading(true);
         setErrorMessage('');
-
         const reservationRequest: ReservationRequest = {
-        flightId: Number(id),
-        contactEmail,
-        passengers,
+            flightId: Number(id),
+            contactEmail,
+            passengers,
         };
-
         try {
 
             await apiClient.post('reservations', reservationRequest);
@@ -115,7 +104,7 @@ const CreateReservation = () => {
             window.scrollTo(0, 0)
         } finally {
             setIsLoading(false);
-        }
+        };
     };
 
     if (!flight) {
@@ -126,6 +115,11 @@ const CreateReservation = () => {
         <main className="bg-light py-5">
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Container>
+                {isLoading && (
+                    <div className="text-center">
+                        <Spinner animation="border" role="status" />
+                    </div>
+                )}
                 <section className='mt-5 mb-3'>
                     <h1 className="text-center text-primary mb-4">Полет</h1>
                     <Card className="shadow-sm d-flex flex-column align-items-center justify-content-center text-center">
@@ -167,7 +161,7 @@ const CreateReservation = () => {
                                             type="text"
                                             name="firstName"
                                             value={passenger.firstName}
-                                            onChange={(e) => handlePassengerChange(index, e)}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePassengerChange(index, e)}
                                             required
                                         />
                                     </Form.Group>
@@ -177,7 +171,7 @@ const CreateReservation = () => {
                                             type="text"
                                             name="middleName"
                                             value={passenger.middleName}
-                                            onChange={(e) => handlePassengerChange(index, e)}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePassengerChange(index, e)}
                                             required
                                         />
                                     </Form.Group>
@@ -187,7 +181,7 @@ const CreateReservation = () => {
                                             type="text"
                                             name="lastName"
                                             value={passenger.lastName}
-                                            onChange={(e) => handlePassengerChange(index, e)}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePassengerChange(index, e)}
                                             required
                                         />
                                     </Form.Group>
@@ -199,7 +193,7 @@ const CreateReservation = () => {
                                             type="text"
                                             name={'personalIdentificationNumber'}
                                             value={passenger.personalIdentificationNumber}
-                                            onChange={(e) => handlePassengerChange(index, e)}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePassengerChange(index, e)}
                                             required
                                         />
                                     </Form.Group>
@@ -209,7 +203,7 @@ const CreateReservation = () => {
                                             type="text"
                                             name="nationality"
                                             value={passenger.nationality}
-                                            onChange={(e) => handlePassengerChange(index, e)}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePassengerChange(index, e)}
                                             required
                                         />
                                     </Form.Group>
@@ -219,7 +213,7 @@ const CreateReservation = () => {
                                             type="text"
                                             name={'phoneNumber'}
                                             value={passenger.phoneNumber}
-                                            onChange={(e) => handlePassengerChange(index, e)}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePassengerChange(index, e)}
                                             required
                                         />
                                     </Form.Group>
@@ -229,7 +223,7 @@ const CreateReservation = () => {
                                             as="select"
                                             name="seatType"
                                             value={passenger.seatType}
-                                            onChange={(e) => handlePassengerChange(index, e)}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePassengerChange(index, e)}
                                             required
                                         >
                                             <option value="ECONOMY">Икономична</option>

@@ -27,10 +27,10 @@ function App() {
                 <Route element={<RequireAuthentication />}>
                     <Route path="/reservations" element={<Reservations />} />
                     <Route path="/reservations/:id" element={<Reservation />} />
+                    <Route path="/flights/:id" element={<Flight />} />
                     <Route element={<RequireAuthorization allowedRoles={['ROLE_ADMIN']} />}>
                         <Route path="/employees" element={<Employees />} />
                         <Route path="/employees/create" element={<CreateEmployee />} />
-                        <Route path="/flights/:id" element={<Flight />} />
                         <Route path="/flights/create" element={<CreateFlight />} />
                     </Route>
                 </Route>

@@ -6,15 +6,11 @@ import { useNavigate } from 'react-router-dom';
 const CurrentUser = () => {
     const { auth, setAuth } = useAuth();
     const [showModal, setShowModal] = useState(false); 
-
     const navigate = useNavigate();
-
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
-
-    const handleLogout = async (e) => {
+    const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        // TODO: Extract method
         setAuth({
             accessToken: null,
             refreshToken: null,
@@ -43,7 +39,6 @@ const CurrentUser = () => {
                 </Modal.Body>
             </Modal>
         </>
-            
     );
 }
 
