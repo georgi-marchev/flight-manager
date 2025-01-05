@@ -84,9 +84,8 @@ const UpdateFlight = () => {
         const formattedArrivalTime = formatDateWithTimeZone(flightData.arrivalTime);
 
         try {
-            console.log(`/flights/${flightId}`);
             await authenticatedApiClient.put(`/flights/${flightId}`, {
-                ...flightData,
+                pilotId: flightData.pilotId,
                 departureTime: formattedDepartureTime,
                 arrivalTime: formattedArrivalTime,
             });
@@ -117,7 +116,7 @@ const UpdateFlight = () => {
                         <Row className="mb-3">
 
                             <Form.Group as={Col} controlId="departureLocation">
-                                <Form.Label>От:</Form.Label>
+                                <Form.Label>От</Form.Label>
                                 <Form.Control
                                     as="input"
                                     name="departureLocation"
@@ -126,7 +125,7 @@ const UpdateFlight = () => {
                                 />
                             </Form.Group>
                             <Form.Group as={Col} controlId="destinationLocation">
-                                <Form.Label>До:</Form.Label>
+                                <Form.Label>До</Form.Label>
                                 <Form.Control
                                     as="input"
                                     name="destinationLocation"
@@ -139,7 +138,7 @@ const UpdateFlight = () => {
                         <Row className="mb-3">
                             
                             <Form.Group as={Col} controlId="pilotId">
-                                <Form.Label>Пилот:</Form.Label>
+                                <Form.Label>Пилот<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     as="select"
                                     name="pilotId"
@@ -156,7 +155,7 @@ const UpdateFlight = () => {
                                 </Form.Control>
                             </Form.Group>
                             <Form.Group as={Col} controlId="departureTime">
-                                <Form.Label>Излита:</Form.Label>
+                                <Form.Label>Излита<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     type="datetime-local"
                                     name="departureTime"
@@ -167,7 +166,7 @@ const UpdateFlight = () => {
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="arrivalTime">
-                                <Form.Label>Каца</Form.Label>
+                                <Form.Label>Каца<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     type="datetime-local"
                                     name="arrivalTime"

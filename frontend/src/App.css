@@ -21,3 +21,7 @@
 header .active {
     background-color: rgb(67, 67, 67) !important;
 }
+
+.required-element {
+    color: rgb(148, 7, 7);
+}

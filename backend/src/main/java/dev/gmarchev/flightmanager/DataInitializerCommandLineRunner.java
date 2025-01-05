@@ -3,7 +3,6 @@ package dev.gmarchev.flightmanager;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import dev.gmarchev.flightmanager.config.AccountMapping;
 import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
@@ -101,6 +100,7 @@ public class DataInitializerCommandLineRunner implements CommandLineRunner {
 							.firstName("EmployeeName" + i)
 							.lastName("EmployeeLastname" + i)
 							.address("Fake address" + i)
+							.phoneNumber(String.valueOf(1000000000 + i))
 							.personalIdentificationNumber(String.valueOf(1000000000 + i))
 							.build(), RoleType.EMPLOYEE);
 		}

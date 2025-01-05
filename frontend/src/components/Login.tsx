@@ -43,7 +43,7 @@ const Login = () => {
                 <Form onSubmit={handleLogin} className="border p-4 rounded shadow-sm">
                     <Row>
                         <Form.Group as={Col} controlId="formUsername">
-                            <Form.Label>Потребителско име:</Form.Label>
+                            <Form.Label>Потребителско име<span className='required-element'>*</span></Form.Label>
                             <Form.Control 
                             type="text" 
                             value={username}
@@ -52,7 +52,7 @@ const Login = () => {
                             />
                         </Form.Group>
                         <Form.Group as={Col} controlId="formPassword">
-                            <Form.Label>Парола:</Form.Label>
+                            <Form.Label>Парола<span className='required-element'>*</span></Form.Label>
                             <Form.Control 
                             type="password" 
                             value={password}

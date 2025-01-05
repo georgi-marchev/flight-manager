@@ -155,7 +155,7 @@ const Flight = () => {
                             <Row className="justify-content-end">
                                 <Col xs="auto">
                                     <Form.Group controlId="pageSize" className="align-items-center">
-                                        <Form.Label className="mr-3 mb-0">Резултати на страница:</Form.Label>
+                                        <Form.Label className="mr-3 mb-0">Резултати на страница</Form.Label>
                                         <Form.Select
                                             aria-label="Резултати на страница"
                                             value={size}

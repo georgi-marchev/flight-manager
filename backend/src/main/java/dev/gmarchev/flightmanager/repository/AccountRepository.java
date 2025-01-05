@@ -28,11 +28,13 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     AND (:firstName IS NULL OR LOWER(a.firstName) LIKE LOWER(CONCAT('%', :firstName, '%')))
     AND (:lastName IS NULL OR LOWER(a.lastName) LIKE LOWER(CONCAT('%', :lastName, '%')))
     """)
-	Page<Account> findReservationByOptionalFilters(
+	Page<Account> findAccountByOptionalFilters(
 			@Param("username") @Nullable String username,
 			@Param("email") @Nullable String email,
 			@Param("firstName") @Nullable String firstName,
 			@Param("lastName") @Nullable String lastName,
 			@Param("role") RoleType role,
 			Pageable pageable);
+
+	Optional<Account> findByIdAndRolesName(Long id, RoleType role);
 }

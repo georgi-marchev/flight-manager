@@ -1,10 +1,13 @@
 package dev.gmarchev.flightmanager.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import dev.gmarchev.flightmanager.dto.AccountPageItem;
+import dev.gmarchev.flightmanager.dto.AccountResponse;
+import dev.gmarchev.flightmanager.dto.EmployeeUpdateRequest;
 import dev.gmarchev.flightmanager.dto.PageResponse;
 import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
 import dev.gmarchev.flightmanager.exceptions.EntityNotFoundException;
@@ -41,8 +44,7 @@ public class AccountService {
 
 		Role role = roleRepository.findByName(roleType)
 				.orElseThrow(() -> new EntityNotFoundException(
-						String.format(
-								"Role with name %s was not found in the database", roleType),
+						String.format("Role with name %s was not found in the database", roleType),
 						"Роля не може да бъде намерена."));
 
 		Account account = Account.builder()
@@ -77,7 +79,7 @@ public class AccountService {
 			int pageNumber,
 			int pageSize) {
 
-		Page<Account> page = accountRepository.findReservationByOptionalFilters(
+		Page<Account> page = accountRepository.findAccountByOptionalFilters(
 				username, email, firstName, lastName, RoleType.EMPLOYEE, PageRequest.of(pageNumber, pageSize));
 
 		List<AccountPageItem> accounts = page.get()
@@ -91,5 +93,48 @@ public class AccountService {
 				.collect(Collectors.toUnmodifiableList());
 
 		return new PageResponse<>(accounts, page.hasNext());
+	}
+
+	public AccountResponse getEmployeeAccountById(Long accountId) {
+
+		Account account = findEmployeeAccountById(accountId);
+
+		return new AccountResponse(
+				account.getId(),
+				account.getUsername(),
+				account.getEmail(),
+				account.getFirstName(),
+				account.getLastName(),
+				account.getPersonalIdentificationNumber(),
+				account.getAddress(),
+				account.getPhoneNumber(),
+				account.getRoles().stream().map(Role::getId).collect(Collectors.toSet())
+		);
+	}
+
+	private Account findEmployeeAccountById(long accountId) {
+
+		return accountRepository.findByIdAndRolesName(accountId, RoleType.EMPLOYEE)
+				.orElseThrow(() -> new EntityNotFoundException(
+						String.format("Account with ID %d cannot be found", accountId),
+						"Профил на служител не може да бъде открит."));
+	}
+
+	public void updateEmployeeAccount(Long accountId, EmployeeUpdateRequest employeeUpdateRequest) {
+
+		Account account = findEmployeeAccountById(accountId);
+
+		if (employeeUpdateRequest.getNewPassword() != null && !employeeUpdateRequest.getNewPassword().isBlank()) {
+
+			account.setPassword(passwordEncoder.encode(employeeUpdateRequest.getNewPassword()));
+		}
+		account.setEmail(employeeUpdateRequest.getEmail());
+		account.setFirstName(employeeUpdateRequest.getFirstName());
+		account.setLastName(employeeUpdateRequest.getLastName());
+		account.setPersonalIdentificationNumber(employeeUpdateRequest.getPersonalIdentificationNumber());
+		account.setAddress(employeeUpdateRequest.getAddress());
+		account.setPhoneNumber(employeeUpdateRequest.getPhoneNumber());
+
+		accountRepository.save(account);
 	}
 }

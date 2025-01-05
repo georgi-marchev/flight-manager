@@ -91,7 +91,7 @@ const Reservations = () => {
                     <Form>
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="contactEmail">
-                                <Form.Label>Имейл:</Form.Label>
+                                <Form.Label>Имейл</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Имейл" 
@@ -101,7 +101,7 @@ const Reservations = () => {
                                 />
                             </Form.Group>
                             <Form.Group as={Col} controlId="pageSize">
-                                <Form.Label>Резултати на страница:</Form.Label>
+                                <Form.Label>Резултати на страница</Form.Label>
                                 <Form.Select 
                                     aria-label="Резултати на страница" 
                                     value={size}

@@ -3,6 +3,8 @@ import useAuthenticatedApiClient from '../hooks/useAuthenticatedApiClient';
 import Pagination from './Pagination';
 import { Alert, Col, Container, Form, Row, Card, ListGroup, Spinner } from 'react-bootstrap';
 import { getErrorMessageOrDefault } from '../utils/responseUtil';
+import { useIsAdmin } from '../hooks/useAccess';
+import { Link } from 'react-router-dom';
 
 const PAGE_SIZES = [10, 25, 50];
 
@@ -15,6 +17,7 @@ interface Employee {
 }
 
 const Employees = () => {
+    const isAdmin = useIsAdmin();
     const [employees, setEmployees] = useState([]);
     const authenticatedClient = useAuthenticatedApiClient();
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -168,6 +171,11 @@ const Employees = () => {
                                             </ListGroup.Item>
                                             <ListGroup.Item>
                                                 Имейл: <span className="ms-3"><a href={`mailto:${employee.email}`} className="link-primary"> {employee.email}</a></span>
+                                            </ListGroup.Item>
+                                        </ListGroup>
+                                        <ListGroup variant="flush">
+                                            <ListGroup.Item className="d-flex justify-content-center">
+                                                {isAdmin && <Link to={`${employee.id}/edit`}  className="btn btn-outline-primary">Редактирай</Link>}
                                             </ListGroup.Item>
                                         </ListGroup>
                                     </Card.Body>

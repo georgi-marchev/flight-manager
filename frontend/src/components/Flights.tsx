@@ -99,7 +99,7 @@ const Flights = () => {
                     <Form>
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="departureDate">
-                                <Form.Label>Дата:</Form.Label>
+                                <Form.Label>Дата</Form.Label>
                                 <Form.Control 
                                     type="date" 
                                     placeholder="Въведете дата" 
@@ -110,7 +110,7 @@ const Flights = () => {
                             </Form.Group>
                         
                             <Form.Group as={Col} controlId="departureLocation">
-                                <Form.Label>От:</Form.Label>
+                                <Form.Label>От</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Държава, град, или летище" 
@@ -121,7 +121,7 @@ const Flights = () => {
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="destinationLocation">
-                                <Form.Label>До:</Form.Label>
+                                <Form.Label>До</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Държава, град, или летище" 
@@ -132,7 +132,7 @@ const Flights = () => {
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="availableSeatsEconomy">
-                                <Form.Label>Места (икономична):</Form.Label>
+                                <Form.Label>Места (икономична)</Form.Label>
                                 <Form.Control
                                     type="number"
                                     placeholder="Въведете брой" 
@@ -144,7 +144,7 @@ const Flights = () => {
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="availableSeatsBusiness">
-                                <Form.Label>Места (бизнес):</Form.Label>
+                                <Form.Label>Места (бизнес)</Form.Label>
                                 <Form.Control
                                     type="number"
                                     placeholder="Въведете брой" 
@@ -156,7 +156,7 @@ const Flights = () => {
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="pageSize">
-                                <Form.Label>Резултати на страница:</Form.Label>
+                                <Form.Label>Резултати на страница</Form.Label>
                                 <Form.Select 
                                     aria-label="Резултати на страница" 
                                     value={size}

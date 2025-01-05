@@ -34,15 +34,7 @@ public class FlightController {
 	@PostMapping
 	public ResponseEntity<String> create(@RequestBody @Valid FlightCreateRequest flightCreateRequest) {
 
-		try	{
-
-			flightService.createFlight(flightCreateRequest);
-
-		} catch (IllegalArgumentException e) {
-
-			return ResponseEntity.status(HttpStatus.CONFLICT)
-					.body(e.getMessage());
-		}
+		flightService.createFlight(flightCreateRequest);
 
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
@@ -51,7 +43,7 @@ public class FlightController {
 
 	@PutMapping("/{flightId}")
 	public ResponseEntity<String> updateFlight(
-			@PathVariable @Min(value = 1, message = "Невалиден идентификатор за полет.") Long flightId,
+			@PathVariable long flightId,
 			@RequestBody @Valid FlightUpdateRequest flightUpdateRequest) {
 
 		flightService.updateFlight(flightId, flightUpdateRequest);
@@ -84,15 +76,7 @@ public class FlightController {
 	@GetMapping("/{flightId}")
 	public ResponseEntity<FlightResponse> getFlightById(@PathVariable long flightId) {
 
-		try {
-
-			return ResponseEntity.ok(flightService.getFlightById(flightId));
-
-		} catch (IllegalArgumentException e) {
-
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(null);
-		}
+		return ResponseEntity.ok(flightService.getFlightById(flightId));
 	}
 
 	@GetMapping("/{id}/passengers")
@@ -101,16 +85,6 @@ public class FlightController {
 			@RequestParam int page,
 			@RequestParam int size) {
 
-		// This will be in the same view as the view flight view, paginated. The data about the flight will be fetched
-		// by the client from getFlightById()
-		try {
-
-			return ResponseEntity.ok(flightService.getReservationPassengersByFlightById(id, page, size));
-
-		} catch (IllegalArgumentException e) {
-
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(null);
-		}
+		return ResponseEntity.ok(flightService.getReservationPassengersByFlightById(id, page, size));
 	}
 }

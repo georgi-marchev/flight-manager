@@ -140,7 +140,7 @@ const CreateReservation = () => {
                     <Form onSubmit={handleSubmit} className="border p-4 rounded shadow-sm">
                         <Row className="mb-4">
                             <Form.Group as={Col} controlId="contactEmail">
-                                <Form.Label>Имейл:</Form.Label>
+                                <Form.Label>Имейл<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     type="email"
                                     placeholder="Въведете имейл адрес"
@@ -156,7 +156,7 @@ const CreateReservation = () => {
                                 <h4 className="text-center mb-3">Пътник {index + 1}</h4>
                                  <Row className="mb-3">
                                     <Form.Group as={Col} controlId={`firstName${index}`} className="mb-3">
-                                        <Form.Label>Име:</Form.Label>
+                                        <Form.Label>Име<span className='required-element'>*</span></Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="firstName"
@@ -166,7 +166,7 @@ const CreateReservation = () => {
                                         />
                                     </Form.Group>
                                     <Form.Group as={Col} controlId={`middleName${index}`} className="mb-3">
-                                        <Form.Label>Презиме:</Form.Label>
+                                        <Form.Label>Презиме<span className='required-element'>*</span></Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="middleName"
@@ -176,7 +176,7 @@ const CreateReservation = () => {
                                         />
                                     </Form.Group>
                                     <Form.Group as={Col} controlId={`lastName${index}`} className="mb-3">
-                                        <Form.Label>Фамилия:</Form.Label>
+                                        <Form.Label>Фамилия<span className='required-element'>*</span></Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="lastName"
@@ -188,7 +188,7 @@ const CreateReservation = () => {
                                 </Row>
                                 <Row className="mb-3">
                                     <Form.Group as={Col} controlId={`personalIdentificationNumber${index}`} className="mb-3">
-                                        <Form.Label>ЕГН:</Form.Label>
+                                        <Form.Label>ЕГН<span className='required-element'>*</span></Form.Label>
                                         <Form.Control
                                             type="text"
                                             name={'personalIdentificationNumber'}
@@ -198,7 +198,7 @@ const CreateReservation = () => {
                                         />
                                     </Form.Group>
                                     <Form.Group as={Col} controlId={`nationality${index}`} className="mb-3">
-                                        <Form.Label>Гражданство:</Form.Label>
+                                        <Form.Label>Гражданство<span className='required-element'>*</span></Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="nationality"
@@ -208,7 +208,7 @@ const CreateReservation = () => {
                                         />
                                     </Form.Group>
                                     <Form.Group as={Col} controlId={`phoneNumber${index}`} className="mb-3">
-                                        <Form.Label>Тел. №:</Form.Label>
+                                        <Form.Label>Тел. №<span className='required-element'>*</span></Form.Label>
                                         <Form.Control
                                             type="text"
                                             name={'phoneNumber'}
@@ -218,7 +218,7 @@ const CreateReservation = () => {
                                         />
                                     </Form.Group>
                                     <Form.Group as={Col} controlId={`seatType${index}`} className="mb-3">
-                                        <Form.Label>Вид място:</Form.Label>
+                                        <Form.Label>Вид място<span className='required-element'>*</span></Form.Label>
                                         <Form.Control
                                             as="select"
                                             name="seatType"

@@ -120,7 +120,7 @@ const CreateFlight = () => {
                     <Form onSubmit={handleSubmit} className="border p-4 rounded shadow-sm">
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="flightPilot">
-                                <Form.Label>Пилот:</Form.Label>
+                                <Form.Label>Пилот<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     as="select"
                                     value={flightData.flightPilot}
@@ -137,7 +137,7 @@ const CreateFlight = () => {
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="flightAirplane">
-                                <Form.Label>Самолет:</Form.Label>
+                                <Form.Label>Самолет<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     as="select"
                                     value={flightData.flightAirplane}
@@ -156,7 +156,7 @@ const CreateFlight = () => {
 
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="flightDepartureLocation">
-                                <Form.Label>От:</Form.Label>
+                                <Form.Label>От<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     as="select"
                                     value={flightData.flightDepartureLocation}
@@ -173,7 +173,7 @@ const CreateFlight = () => {
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="flightDestinationLocation">
-                                <Form.Label>До:</Form.Label>
+                                <Form.Label>До<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     as="select"
                                     value={flightData.flightDestinationLocation}
@@ -192,7 +192,7 @@ const CreateFlight = () => {
 
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="departureTime">
-                                <Form.Label>Излита:</Form.Label>
+                                <Form.Label>Излита<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     type="datetime-local"
                                     value={flightData.departureTime}
@@ -202,7 +202,7 @@ const CreateFlight = () => {
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="arrivalTime">
-                                <Form.Label>Каца</Form.Label>
+                                <Form.Label>Каца<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     type="datetime-local"
                                     value={flightData.arrivalTime}

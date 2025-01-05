@@ -1,29 +1,50 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Button, Alert, Spinner, Container, Row, Col } from 'react-bootstrap';
 import useAuthenticatedApiClient from '../hooks/useAuthenticatedApiClient';
 import { getErrorMessageOrDefault } from '../utils/responseUtil';
+import { useParams, useNavigate } from "react-router-dom";
 
+const UpdateEmployee = () => {
 
-function createEmptyEmployeeObj() {
-    return {
+    const { employeeId } = useParams<{ employeeId: string }>();
+    const navigate = useNavigate();
+    const authenticatedApiClient = useAuthenticatedApiClient();
+    const [employeeData, setEmployeeData] = useState({
         username: '',
-        password: '',
+        newPassword: '',
         email: '',
         firstName: '',
         lastName: '',
         personalIdentificationNumber: '',
         address: '',
-        phoneNumber: ''
-    };
-}
-
-const CreateEmployee = () => {
-    const authenticatedApiClient = useAuthenticatedApiClient();
-
-    const [employeeData, setEmployeeData] = useState(createEmptyEmployeeObj());
-    
+        phoneNumber: '',
+    });
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const accountResponse = await authenticatedApiClient.get(`/employee-accounts/${employeeId}`);
+                setEmployeeData((prev) => ({
+                    ...prev,
+                    username: accountResponse.data.username,
+                    email: accountResponse.data.email,
+                    firstName: accountResponse.data.firstName,
+                    lastName: accountResponse.data.lastName,
+                    personalIdentificationNumber: accountResponse.data.personalIdentificationNumber,
+                    address: accountResponse.data.address,
+                    phoneNumber: accountResponse.data.phoneNumber,
+                  }));
+            } catch (error) {
+                setErrorMessage(getErrorMessageOrDefault(error, "Грешка при изтегляне на данни. Моля опитайте отново!"));
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [employeeId]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -35,11 +56,13 @@ const CreateEmployee = () => {
         setLoading(true);
         setErrorMessage('');
         try {
-            await authenticatedApiClient.post('/employee-accounts', employeeData);
-            alert('Служител създаден успешно!');
-            setEmployeeData(createEmptyEmployeeObj());
+            console.log(employeeData);
+            await authenticatedApiClient.put(`/employee-accounts/${employeeId}`, employeeData);
+            alert('Служител актуализиран успешно!');
+            navigate('/employees')
         } catch (err) {
-            setErrorMessage(getErrorMessageOrDefault(err, 'Грешка при създаване на служител.'));
+            console.log(err);
+            setErrorMessage(getErrorMessageOrDefault(err, 'Грешка при актуализиране на служител.'));
             window.scrollTo(0, 0)
         } finally {
             setLoading(false);
@@ -71,14 +94,13 @@ const CreateEmployee = () => {
                                 />
                             </Form.Group>
 
-                            <Form.Group as={Col} controlId="password">
-                                <Form.Label>Парола<span className='required-element'>*</span></Form.Label>
+                            <Form.Group as={Col} controlId="newPassword">
+                                <Form.Label>Парола</Form.Label>
                                 <Form.Control
-                                    type="password"
-                                    name="password"
-                                    value={employeeData.password}
+                                    type="newPassword"
+                                    name="newPassword"
+                                    value={employeeData.newPassword}
                                     onChange={handleInputChange}
-                                    required
                                 />
                             </Form.Group>
                         </Row>
@@ -117,7 +139,7 @@ const CreateEmployee = () => {
                                 />
                             </Form.Group>
                             <Form.Group as={Col} controlId="phoneNumber">
-                                <Form.Label>Телефонен номер<span className='required-element'>*</span></Form.Label>
+                                <Form.Label>Телефонен №<span className='required-element'>*</span></Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="phoneNumber"
@@ -154,7 +176,7 @@ const CreateEmployee = () => {
                         <Row className="text-center mt-5 mb-3">
                             <Form.Group as={Col} controlId={'submitButton'}>
                                 <Button variant="primary" type="submit" disabled={loading}>
-                                    Създай служител
+                                    Обнови служител
                                 </Button>
                             </Form.Group>
                         </Row>
@@ -165,4 +187,4 @@ const CreateEmployee = () => {
     );
 };
 
-export default CreateEmployee;
+export default UpdateEmployee;

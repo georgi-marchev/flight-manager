@@ -16,6 +16,7 @@ import Reservation from './components/Reservation.tsx';
 import Flight from './components/Flight.tsx';
 import CreateFlight from './components/CreateFlight.tsx';
 import UpdateFlight from './components/UpdateFlight.tsx';
+import UpdateEmployee from './components/UpdateEmployee.tsx';
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                     <Route element={<RequireAuthorization allowedRoles={['ROLE_ADMIN']} />}>
                         <Route path="/employees" element={<Employees />} />
                         <Route path="/employees/create" element={<CreateEmployee />} />
+                        <Route path="/employees/:employeeId/edit" element={<UpdateEmployee />} />
                         <Route path="/flights/create" element={<CreateFlight />} />
                         <Route path="/flights/:flightId/edit" element={<UpdateFlight />} />
                     </Route>

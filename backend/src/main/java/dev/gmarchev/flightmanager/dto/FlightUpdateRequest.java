@@ -9,18 +9,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class FlightUpdateRequest {
 
-	@NotNull
+	@NotNull(message = "Време на излитане е задължителено.")
 	private ZonedDateTime departureTime;
 
-	@NotNull
+	@NotNull(message = "Време на кацане е задължителено.")
 	private ZonedDateTime arrivalTime;
 
-	@Min(value = 1, message = "Невалиден идентификатор на пилот.")
+	@NotNull(message = "Идентификатор на пилот е задължителен.")
 	private Long pilotId;
 }
