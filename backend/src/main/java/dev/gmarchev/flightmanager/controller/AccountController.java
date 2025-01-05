@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/employee-accounts")
+@RequestMapping("/api/employee-accounts")
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {

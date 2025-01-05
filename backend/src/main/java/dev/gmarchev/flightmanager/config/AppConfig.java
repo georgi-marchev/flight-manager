@@ -74,26 +74,25 @@ public class AppConfig {
 		return http
 				.authorizeHttpRequests(auth -> {
 					auth.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll();
-					auth.requestMatchers("/h2-console/**").permitAll();
-					auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll();
-					auth.requestMatchers("/auth/login", "/auth/refresh-token").permitAll();
-					auth.requestMatchers("/employee-accounts/**").hasRole("ADMIN");
-					auth.requestMatchers(HttpMethod.GET, "/flights").permitAll();
-					auth.requestMatchers(HttpMethod.POST, "/flights").hasRole("ADMIN");
-					auth.requestMatchers(HttpMethod.GET, "/flights/{id}").permitAll();
-					auth.requestMatchers(HttpMethod.POST, "/reservations").permitAll();
-					auth.requestMatchers( "/pilots").hasRole("ADMIN");
-					auth.requestMatchers( "/airplanes").hasRole("ADMIN");
-					auth.requestMatchers( "/airplane-models").hasRole("ADMIN");
-					auth.requestMatchers( "/locations").hasRole("ADMIN");
-					auth.anyRequest().authenticated();
+					auth.requestMatchers("/api/auth/login", "/api/auth/refresh-token").permitAll();
+					auth.requestMatchers("/api/employee-accounts/**").hasRole("ADMIN");
+					auth.requestMatchers(HttpMethod.GET, "/api/flights").permitAll();
+					auth.requestMatchers(HttpMethod.POST, "/api/flights").hasRole("ADMIN");
+					auth.requestMatchers(HttpMethod.GET, "/api/flights/{id}").permitAll();
+					auth.requestMatchers(HttpMethod.POST, "/api/reservations").permitAll();
+					auth.requestMatchers( "/api/pilots").hasRole("ADMIN");
+					auth.requestMatchers( "/api/airplanes").hasRole("ADMIN");
+					auth.requestMatchers( "/api/airplane-models").hasRole("ADMIN");
+					auth.requestMatchers( "/api/locations").hasRole("ADMIN");
+					auth.requestMatchers("/api/**").authenticated();
+					auth.anyRequest().permitAll();
 				})
-				.headers(headers -> headers.frameOptions(FrameOptionsConfig::disable)) // Disable X-Frame-Options header for H2 console
+				// Set X-Frame-Options header to same origin for H2 console
+				.headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin))
 				.csrf(AbstractHttpConfigurer::disable)
 				// TODO: Configure properly for production
 				.cors(cors -> cors.configurationSource(request -> {
 					CorsConfiguration configuration = new CorsConfiguration();
-//					configuration.setAllowedOrigins(Arrays.asList("*"));
 					configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
 					configuration.setAllowedMethods(Arrays.asList("*"));
 					configuration.setAllowedHeaders(Arrays.asList("*"));

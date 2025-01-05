@@ -18,23 +18,24 @@ spring:
         format_sql: true
   h2:
     console:
+      # TODO: disable for prod
       enabled: true
       # access h2 console at http://localhost:${server.port}/${server.servlet.context-path}/h2-console/
-      # (same port and path as the application, i.e. http://localhost:8080/api/h2-console/ )
+      # (same port and path as the application, i.e. http://localhost:8080/h2-console/ )
       path: /h2-console
       settings:
         # prevent trace output
         trace: false
         # disable remote access
         web-allow-others: false
-  # TODO: Remove
   mvc:
     log-request-details: true
+    # Required for FrontEndController to forward requests to React
+    pathMatch:
+      matching-strategy: ANT_PATH_MATCHER
 
 server:
   port: 8080
-  servlet:
-    context-path: /api
 
 jwt:
   secret: "PpKFjf1jJVJL8Qy0FeSuPMO8UC+ILrIJBa7HWgJsLx8="
@@ -45,11 +46,19 @@ jwt:
     # 7 days
     duration-seconds: 604800
 
-# TODO: remove
+# TODO: set for prod
 logging:
   level:
     org:
       springframework: DEBUG
+
+springdoc:
+  api-docs:
+    # TODO: Disable for prod
+    enabled: true
+  swagger-ui:
+    # TODO: Disable for prod
+    enabled: true
 
 accounts:
   admin:

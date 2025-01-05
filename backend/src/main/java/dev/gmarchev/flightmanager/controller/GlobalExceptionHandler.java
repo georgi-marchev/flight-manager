@@ -1,6 +1,5 @@
 package dev.gmarchev.flightmanager.controller;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import dev.gmarchev.flightmanager.exceptions.EntityNotFoundException;
@@ -71,7 +70,7 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity
 				.status(HttpStatus.UNAUTHORIZED)
-				.body(ErrorResponse.of("Bad Credentials", "Невалидни идентификационни данни."));
+				.body(ErrorResponse.of("Bad Credentials", "Грешен потребител или парола."));
 	}
 
 	@ExceptionHandler(ExpiredJwtException.class)
@@ -106,12 +105,4 @@ public class GlobalExceptionHandler {
 						"Method Not Allowed",
 						String.format("The requested method '%s' is not supported", ex.getMethod())));
 	}
-
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<ErrorResponse> handleGeneralException(Exception e) {
-//
-//		return ResponseEntity
-//				.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//				.body(ErrorResponse.of("An unexpected error occurred", "Грешка на сървъра."));
-//	}
 }

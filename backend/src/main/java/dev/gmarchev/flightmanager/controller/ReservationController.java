@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/reservations")
+@RequestMapping("/api/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
 
