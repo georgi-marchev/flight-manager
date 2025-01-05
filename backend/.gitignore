@@ -39,3 +39,6 @@ local.yaml
 .idea
 *.iml
 *.iws
+
+# Exclude React build files
+src/main/resources/static/*
