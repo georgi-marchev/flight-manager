@@ -1,17 +1,14 @@
 import { Navbar, Nav, Container, NavDropdown  } from 'react-bootstrap'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import useAuth from '../hooks/useAuth';
+import { useIsAdmin, useIsLoggedIn } from '../hooks/useAccess';
 import CurrentUser from './CurrentUser';
 
 const Header = () => {
-
-    const { auth } = useAuth();
-    const isAdmin = Boolean(auth && auth.authorities && auth.authorities.includes('ROLE_ADMIN'));
-    const isLoggedIn = Boolean(auth && auth.accessToken);
+    const isAdmin = useIsAdmin();
+    const isLoggedIn = useIsLoggedIn();
     const location = useLocation(); // Get the current location (URL)
     const isDropdownActive = (path: string) => location.pathname.startsWith(path);
   
-
     return (
         <header>
             <Navbar expand="lg" bg="dark" variant="dark">

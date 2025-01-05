@@ -12,7 +12,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
-	// Check if the flight duration overlaps with any other flights for the same pilot or plane
+	// Check if the flight duration overlaps with any other flights for the same pilot or plane. Optionally exclude
+	// a flight by ID, in case we are updating a flight and not changing the pilot.
 	@Query("""
     SELECT COUNT(flight) > 0
     FROM Flight flight
@@ -25,12 +26,14 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     	OR (:startTime BETWEEN flight.departureTime AND flight.arrivalTime)
     	OR (:endTime BETWEEN flight.departureTime AND flight.arrivalTime)
     )
+    AND (:flightId IS NULL OR flight.id != :flightId)
     """)
 	boolean pilotOrPlaneAlreadyBooked(
 			@Param("pilotId") Long pilotId,
 			@Param("airplaneId") Long airplaneId,
 			@Param("startTime") ZonedDateTime startTime,
-			@Param("endTime") ZonedDateTime endTime);
+			@Param("endTime") ZonedDateTime endTime,
+	 		@Param("flightId") Long flightId);
 
 	@Query("""
     SELECT f

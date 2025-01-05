@@ -1,12 +1,14 @@
 package dev.gmarchev.flightmanager.service;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import dev.gmarchev.flightmanager.dto.FlightCreateRequest;
 import dev.gmarchev.flightmanager.dto.FlightPageItem;
 import dev.gmarchev.flightmanager.dto.FlightPassengerPageItem;
 import dev.gmarchev.flightmanager.dto.FlightResponse;
+import dev.gmarchev.flightmanager.dto.FlightUpdateRequest;
 import dev.gmarchev.flightmanager.dto.PageResponse;
 import dev.gmarchev.flightmanager.exceptions.EntityNotFoundException;
 import dev.gmarchev.flightmanager.exceptions.IvnalidFlightException;
@@ -43,62 +45,98 @@ public class FlightService {
 
 	public void createFlight(FlightCreateRequest flightCreateRequest) {
 
-		if (flightCreateRequest.getFlightDepartureLocation() == flightCreateRequest.getFlightDestinationLocation()) {
+		ValidatedFlightData validatedFlightData = validateAndGetFlightData(
+				flightCreateRequest.getFlightDepartureLocation(),
+				flightCreateRequest.getFlightDestinationLocation(),
+				flightCreateRequest.getDepartureTime(),
+				flightCreateRequest.getArrivalTime(),
+				flightCreateRequest.getFlightPilot(),
+				flightCreateRequest.getFlightAirplane());
 
-			new IvnalidFlightException(
+		Flight flight = Flight.builder()
+				.departureTime(validatedFlightData.departureTime)
+				.arrivalTime(validatedFlightData.arrivalTime())
+				.flightDepartureLocation(validatedFlightData.departureLocation)
+				.flightDestinationLocation(validatedFlightData.destinationLocation)
+				.flightAirplane(validatedFlightData.airplane)
+				.flightPilot(validatedFlightData.pilot)
+				.availableSeatsEconomy(validatedFlightData.airplane.getAirplaneAirplaneModel().getCapacityEconomy())
+				.availableSeatsBusiness(validatedFlightData.airplane.getAirplaneAirplaneModel().getCapacityBusiness())
+				.build();
+
+		flightRepository.save(flight);
+
+		log.info("Flight created: {}", flight);
+	}
+
+	private ValidatedFlightData validateAndGetFlightData(
+			Long departureLocationId,
+			Long destinationLocationId,
+			ZonedDateTime departureTime,
+			ZonedDateTime arrivalTime,
+			Long pilotId,
+			Long airplaneId) {
+
+		validateLocations(departureLocationId, destinationLocationId);
+		validateTime(departureTime, arrivalTime);
+
+		// airplane and pilot cannot have overlapping flights
+		Location departureLocation = locationRepository.findById(departureLocationId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Departure location cannot be found.", "Локацията за излитане не може да бъде открита."));
+
+		Location destinationLocation = locationRepository.findById(destinationLocationId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Destination location cannot be found.", "Локацията за кацане не може да бъде открита."));
+
+		Airplane airplane = airplaneRepository.findById(airplaneId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Airplane cannot be found.", "Самолет не може да бъде открит."));
+
+		Pilot pilot = pilotRepository.findById(pilotId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Pilot cannot be found.", "Пилот не може да бъде открит"));
+
+		validatePilotAndAirplaneAvailable(pilotId, airplaneId, departureTime, arrivalTime, null);
+
+		return new ValidatedFlightData(
+				departureLocation, destinationLocation, airplane, pilot, departureTime, arrivalTime);
+	}
+
+	private void validateLocations(Long departureLocationId, Long destinationLocationId) {
+
+		if (departureLocationId == destinationLocationId) {
+
+			throw new IvnalidFlightException(
 					"Departure and arrival locations cannot be the same.",
 					"Време на излитане и кацане не могат да бъдат същите.");
 		}
+	}
 
-		if (!flightCreateRequest.getDepartureTime().isBefore(flightCreateRequest.getArrivalTime())) {
+	private void validateTime(ZonedDateTime departureTime, ZonedDateTime arrivalTime) {
 
-			new IvnalidFlightException(
+		if (!departureTime.isBefore(arrivalTime)) {
+
+			throw new IvnalidFlightException(
 					"Departure time must be before arrival time.",
 					"Време на излитане трябва да е преди време на кацане.");
 		}
+	}
 
-		if (flightRepository.pilotOrPlaneAlreadyBooked(
-				flightCreateRequest.getFlightPilot(),
-				flightCreateRequest.getFlightAirplane(),
-				flightCreateRequest.getDepartureTime(),
-				flightCreateRequest.getArrivalTime())) {
+	/**
+	 * Validates if a pilot or a plane are booked for the requested timeslot. The logic is not designed to work
+	 * perfectly - for instance it allows to book back-to-back without any gap - but it is enough to show the
+	 * possible validations that could be made.
+	 */
+	private void validatePilotAndAirplaneAvailable(
+			Long pilotId, Long airplaneId, ZonedDateTime departureTime, ZonedDateTime arrivalTime, Long flightId) {
+
+		if (flightRepository.pilotOrPlaneAlreadyBooked(pilotId, airplaneId, departureTime, arrivalTime, flightId)) {
 
 			throw new IvnalidFlightException(
 					"Pilot or airplaine are not available for this time slot.",
 					"Пилот или самолет не са налични за този времеви диапазон.");
 		}
-
-		// airplane and pilot cannot have overlapping flights
-		Location departureLocation = locationRepository.findById(flightCreateRequest.getFlightDepartureLocation())
-				.orElseThrow(() -> new EntityNotFoundException(
-						"Departure location cannot be found.", "Локацията за излитане не може да бъде открита."));
-
-		Location destinationLocation = locationRepository.findById(flightCreateRequest.getFlightDestinationLocation())
-				.orElseThrow(() -> new EntityNotFoundException(
-						"Destination location cannot be found.", "Локацията за кацане не може да бъде открита."));
-
-		Airplane airplane = airplaneRepository.findById(flightCreateRequest.getFlightAirplane())
-				.orElseThrow(() -> new EntityNotFoundException(
-						"Airplane cannot be found.", "Самолет не може да бъде открит."));
-
-		Pilot pilot = pilotRepository.findById(flightCreateRequest.getFlightPilot())
-				.orElseThrow(() -> new EntityNotFoundException(
-						"Pilot cannot be found.", "Пилот не може да бъде открит"));
-
-		Flight flight = Flight.builder()
-				.departureTime(flightCreateRequest.getDepartureTime())
-				.arrivalTime(flightCreateRequest.getArrivalTime())
-				.flightDepartureLocation(departureLocation)
-				.flightDestinationLocation(destinationLocation)
-				.flightAirplane(airplane)
-				.flightPilot(pilot)
-				.availableSeatsEconomy(airplane.getAirplaneAirplaneModel().getCapacityEconomy())
-				.availableSeatsBusiness(airplane.getAirplaneAirplaneModel().getCapacityBusiness())
-				.build();
-
-		flightRepository.save(flight);
-
-		log.info("Account created: {}", flight);
 	}
 
 	public PageResponse<FlightPageItem> getFlights(
@@ -147,7 +185,8 @@ public class FlightService {
 				flight.getAvailableSeatsEconomy(),
 				flight.getAvailableSeatsBusiness(),
 				locationToString(flight.getFlightDepartureLocation()),
-				locationToString(flight.getFlightDestinationLocation()));
+				locationToString(flight.getFlightDestinationLocation()),
+				flight.getFlightPilot().getId());
 	}
 
 	public PageResponse<FlightPassengerPageItem> getReservationPassengersByFlightById(long flightId, int pageNumber, int pageSize) {
@@ -179,4 +218,40 @@ public class FlightService {
 				))
 				.toList();
 	}
+
+	public void updateFlight(Long flightId, FlightUpdateRequest flightUpdateRequest) {
+
+		Flight flight = flightRepository.findById(flightId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Flight cannot be found.", "Полетът не може да бъде открит."));
+
+		validateTime(flightUpdateRequest.getDepartureTime(), flightUpdateRequest.getArrivalTime());
+
+		Pilot pilot = pilotRepository.findById(flightUpdateRequest.getPilotId())
+				.orElseThrow(() -> new EntityNotFoundException(
+						"Pilot cannot be found.", "Пилот не може да бъде открит"));
+
+		validatePilotAndAirplaneAvailable(
+				flightUpdateRequest.getPilotId(),
+				flight.getFlightAirplane().getId(),
+				flightUpdateRequest.getDepartureTime(),
+				flightUpdateRequest.getArrivalTime(),
+				flightId);
+
+		flight.setDepartureTime(flightUpdateRequest.getDepartureTime());
+		flight.setArrivalTime(flightUpdateRequest.getArrivalTime());
+		flight.setFlightPilot(pilot);
+
+		flightRepository.save(flight);
+
+		log.info("Flight updated: {}", flight);
+	}
+
+	private record ValidatedFlightData(
+			Location departureLocation,
+			Location destinationLocation,
+			Airplane airplane,
+			Pilot pilot,
+			ZonedDateTime departureTime,
+			ZonedDateTime arrivalTime) {}
 }

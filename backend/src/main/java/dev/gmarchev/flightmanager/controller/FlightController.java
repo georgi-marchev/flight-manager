@@ -6,9 +6,11 @@ import dev.gmarchev.flightmanager.dto.FlightCreateRequest;
 import dev.gmarchev.flightmanager.dto.FlightPageItem;
 import dev.gmarchev.flightmanager.dto.FlightPassengerPageItem;
 import dev.gmarchev.flightmanager.dto.FlightResponse;
+import dev.gmarchev.flightmanager.dto.FlightUpdateRequest;
 import dev.gmarchev.flightmanager.dto.PageResponse;
 import dev.gmarchev.flightmanager.service.FlightService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +49,18 @@ public class FlightController {
 				.body("Flight created successfully");
 	}
 
+	@PutMapping("/{flightId}")
+	public ResponseEntity<String> updateFlight(
+			@PathVariable @Min(value = 1, message = "Невалиден идентификатор за полет.") Long flightId,
+			@RequestBody @Valid FlightUpdateRequest flightUpdateRequest) {
+
+		flightService.updateFlight(flightId, flightUpdateRequest);
+
+		return ResponseEntity
+				.status(HttpStatus.NO_CONTENT)
+				.body("Flight updated successfully ");
+	}
+
 	@GetMapping
 	public ResponseEntity<PageResponse<FlightPageItem>> getFlights(
 			@RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate departureDate,
@@ -66,12 +81,12 @@ public class FlightController {
 				size));
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<FlightResponse> getFlightById(@PathVariable long id) {
+	@GetMapping("/{flightId}")
+	public ResponseEntity<FlightResponse> getFlightById(@PathVariable long flightId) {
 
 		try {
 
-			return ResponseEntity.ok(flightService.getFlightById(id));
+			return ResponseEntity.ok(flightService.getFlightById(flightId));
 
 		} catch (IllegalArgumentException e) {
 

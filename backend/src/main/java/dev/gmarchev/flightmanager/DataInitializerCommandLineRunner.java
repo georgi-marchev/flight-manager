@@ -3,6 +3,7 @@ package dev.gmarchev.flightmanager;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import dev.gmarchev.flightmanager.config.AccountMapping;
 import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
@@ -111,8 +112,10 @@ public class DataInitializerCommandLineRunner implements CommandLineRunner {
 		Airplane airplane = Airplane.builder().airplaneAirplaneModel(airplaneModel).serialNumber("123").build();
 		airplaneRepository.save(airplane);
 
-		Pilot pilot = Pilot.builder().firstName("Top").lastName("Gun").build();
-		pilotRepository.save(pilot);
+		Pilot pilot1 = Pilot.builder().firstName("Петър").lastName("Петров").build();
+		pilotRepository.save(pilot1);
+		Pilot pilot2 = Pilot.builder().firstName("Ивелина").lastName("Иванова").build();
+		pilotRepository.save(pilot2);
 
 		Location location1 = Location.builder().airportName("Heathrow Airport").city("London").country("UK").build();
 		Location location2 = Location.builder().airportName("John F. Kennedy International Airport").city("New York").country("USA").build();
@@ -123,7 +126,7 @@ public class DataInitializerCommandLineRunner implements CommandLineRunner {
 		ZonedDateTime now = ZonedDateTime.now();
 		FlightCreateRequest flight1 = FlightCreateRequest.builder()
 				.flightAirplane(airplane.getId())
-				.flightPilot(pilot.getId())
+				.flightPilot(pilot1.getId())
 				.flightDepartureLocation(location1.getId())
 				.flightDestinationLocation(location2.getId())
 				.departureTime(now)
@@ -131,7 +134,7 @@ public class DataInitializerCommandLineRunner implements CommandLineRunner {
 				.build();
 		FlightCreateRequest flight2 = FlightCreateRequest.builder()
 				.flightAirplane(airplane.getId())
-				.flightPilot(pilot.getId())
+				.flightPilot(pilot2.getId())
 				.flightDepartureLocation(location3.getId())
 				.flightDestinationLocation(location4.getId())
 				.departureTime(now.plusHours(2))
@@ -141,7 +144,7 @@ public class DataInitializerCommandLineRunner implements CommandLineRunner {
 		ZonedDateTime tomorrow = now.plusDays(1);
 		FlightCreateRequest flight3 = FlightCreateRequest.builder()
 				.flightAirplane(airplane.getId())
-				.flightPilot(pilot.getId())
+				.flightPilot(pilot1.getId())
 				.flightDepartureLocation(location1.getId())
 				.flightDestinationLocation(location2.getId())
 				.departureTime(tomorrow)
@@ -149,7 +152,7 @@ public class DataInitializerCommandLineRunner implements CommandLineRunner {
 				.build();
 		FlightCreateRequest flight4 = FlightCreateRequest.builder()
 				.flightAirplane(airplane.getId())
-				.flightPilot(pilot.getId())
+				.flightPilot(pilot2.getId())
 				.flightDepartureLocation(location3.getId())
 				.flightDestinationLocation(location4.getId())
 				.departureTime(tomorrow.plusHours(2))

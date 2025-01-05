@@ -20,4 +20,6 @@ public class FlightResponse {
 	private String departureLocation;
 
 	private String destinationLocation;
+
+	private long pilotId;
 }

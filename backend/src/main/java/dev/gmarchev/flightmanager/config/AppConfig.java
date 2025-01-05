@@ -78,7 +78,8 @@ public class AppConfig {
 					auth.requestMatchers("/api/employee-accounts/**").hasRole("ADMIN");
 					auth.requestMatchers(HttpMethod.GET, "/api/flights").permitAll();
 					auth.requestMatchers(HttpMethod.POST, "/api/flights").hasRole("ADMIN");
-					auth.requestMatchers(HttpMethod.GET, "/api/flights/{id}").permitAll();
+					auth.requestMatchers(HttpMethod.GET, "/api/flights/{flightId}").permitAll();
+					auth.requestMatchers(HttpMethod.PUT, "/api/flights/{flightId}").hasRole("ADMIN");
 					auth.requestMatchers(HttpMethod.POST, "/api/reservations").permitAll();
 					auth.requestMatchers( "/api/pilots").hasRole("ADMIN");
 					auth.requestMatchers( "/api/airplanes").hasRole("ADMIN");

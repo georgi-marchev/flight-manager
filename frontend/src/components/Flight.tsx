@@ -7,6 +7,7 @@ import { formatDateTime, getDuration } from '../utils/dateHelper';
 import { Link } from 'react-router-dom';
 import Pagination from './Pagination';
 import { getErrorMessageOrDefault } from '../utils/responseUtil';
+import { useIsAdmin } from '../hooks/useAccess';
 
 const PAGE_SIZES = [10, 25, 50];
 
@@ -40,6 +41,7 @@ const Flight = () => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const authenticatedApiClient = useAuthenticatedApiClient();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const isAdmin = useIsAdmin();
 
     useEffect(() => {
         const fetchFlight = async () => {
@@ -102,7 +104,18 @@ const Flight = () => {
                                     <ListGroup.Item>Времетраене: {getDuration(flight.departureTime, flight.arrivalTime)}</ListGroup.Item>
                                     <ListGroup.Item>Свободни места (икономична): {flight.availableSeatsEconomy}</ListGroup.Item>
                                     <ListGroup.Item>Свободни места (бизнес): {flight.availableSeatsBusiness}</ListGroup.Item>
+                                    {!isAdmin || 
+                                        <ListGroup.Item className="d-flex justify-content-center">
+                                            <Link
+                                                to={`/flights/${id}/edit`}
+                                                className="btn btn-outline-primary text-decoration-none"
+                                            >
+                                                Редактирай полет
+                                            </Link>
+                                        </ListGroup.Item>
+                                    }
                                 </ListGroup>
+                                
                             </Card.Body>
                         </Card>
                     </section>
