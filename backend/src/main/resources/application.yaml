@@ -2,83 +2,33 @@ spring:
   application:
     name: flight-manager
   datasource:
-#    url: jdbc:h2:mem:flight_manager
     # This URL configures the H2 database to remain open as long as the JVM is running, stay open after JVM shutdown,
     # automatically reconnect on connection loss, and operate in PostgreSQL compatibility mode.
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;
+    # TODO: Enter value
     username: admin
+    # TODO: Enter value
     password:
     driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    # TODO: remove
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
   h2:
     console:
-      # TODO: disable for prod
-      enabled: true
-      # access h2 console at http://localhost:${server.port}/${server.servlet.context-path}/h2-console/
-      # (same port and path as the application, i.e. http://localhost:8080/h2-console/ )
-      path: /h2-console
-      settings:
-        # prevent trace output
-        trace: false
-        # disable remote access
-        web-allow-others: false
+      enabled: false
   mvc:
-    log-request-details: true
     # Required for FrontEndController to forward requests to React
     pathMatch:
       matching-strategy: ANT_PATH_MATCHER
-
-server:
-  port: 8080
-
-jwt:
-  secret: "PpKFjf1jJVJL8Qy0FeSuPMO8UC+ILrIJBa7HWgJsLx8="
-  access:
-    # 1 hour
-    duration-seconds: 3600
-  refresh:
-    # 7 days
-    duration-seconds: 604800
-
-# TODO: set for prod
-logging:
-  level:
-    org:
-      springframework: DEBUG
-
-springdoc:
-  api-docs:
-    # TODO: Disable for prod
-    enabled: true
-  swagger-ui:
-    # TODO: Disable for prod
-    enabled: true
-
-accounts:
-  admin:
-    username: admin
-    password: 1234
-    email: admin@fake.com
-    first-name: John
-    last-name: Doe
-    personal-identification-number: 111111111
-    address: 5861 Arctic Blvd, Anchorage, Alaska 99518
-    phone-number: 123456789
-
----
-
-spring:
   mail:
-    host: smtp.mailersend.net
-    port: 587
+    # TODO: Enter value
+    host:
+    # TODO: Enter value
+    port:
+    # TODO: Enter value
     username:
+    # TODO: Enter value
     password:
+    # TODO: Enter value
     from:
     properties:
       mail:
@@ -90,3 +40,36 @@ spring:
     reservation:
       subject: "Потвърждение за резервация"
       body-template: "Потвърдена резервация за полет от {from} за {to} на {departureTime} за пътници на борй: {passengerCount}."
+
+server:
+  port: 8080
+
+jwt:
+  # TODO: Enter value (base64-encoded string)
+  secret:
+  access:
+    # 1 hour
+    duration-seconds: 3600
+  refresh:
+    # 7 days
+    duration-seconds: 604800
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+accounts:
+  admin:
+    # TODO: Enter value
+    username:
+    # TODO: Enter value
+    password:
+    email: admin@fake.com
+    first-name: John
+    last-name: Doe
+    personal-identification-number: 111111111
+    address: 5861 Arctic Blvd, Anchorage, Alaska 99518
+    phone-number: 123456789
+
