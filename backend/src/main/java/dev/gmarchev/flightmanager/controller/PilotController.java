@@ -29,7 +29,7 @@ public class PilotController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody @Valid PilotCreateRequest pilotCreateRequest) {
+	public ResponseEntity<Object> createPilot(@RequestBody @Valid PilotCreateRequest pilotCreateRequest) {
 
 		return ResponseEntity
 				.status(HttpStatus.CREATED)

@@ -18,7 +18,7 @@ public class AirplaneModelController {
 	private final AirplaneModelService airplaneModelService;
 
 	@GetMapping
-	public ResponseEntity<List<AirplaneModelResponse>> getAirplanes() {
+	public ResponseEntity<List<AirplaneModelResponse>> getAirplanesModels() {
 
 		return ResponseEntity.ok(airplaneModelService.getAirplaneModels());
 	}

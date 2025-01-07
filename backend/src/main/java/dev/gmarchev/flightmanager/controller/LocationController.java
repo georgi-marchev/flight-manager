@@ -23,13 +23,13 @@ public class LocationController {
 	private final LocationService locationService;
 
 	@GetMapping
-	public ResponseEntity<List<LocationResponse>> getPilots() {
+	public ResponseEntity<List<LocationResponse>> getLocations() {
 
 		return ResponseEntity.ok(locationService.getLocations());
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> create(@RequestBody @Valid LocationCreateRequest locationCreateRequest) {
+	public ResponseEntity<Object> createLocation(@RequestBody @Valid LocationCreateRequest locationCreateRequest) {
 
 		return ResponseEntity
 				.status(HttpStatus.CREATED)

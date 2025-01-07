@@ -30,7 +30,7 @@ public class AccountController {
 	private final AccountService accountService;
 
 	@PostMapping
-	public ResponseEntity<String> create(@RequestBody @Valid AccountCreateRequest accountCreateRequest) {
+	public ResponseEntity<String> createEmployeeAccount(@RequestBody @Valid AccountCreateRequest accountCreateRequest) {
 
 		accountService.createEmployeeAccount(accountCreateRequest);
 

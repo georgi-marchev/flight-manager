@@ -32,7 +32,7 @@ public class FlightController {
 	private final FlightService flightService;
 
 	@PostMapping
-	public ResponseEntity<String> create(@RequestBody @Valid FlightCreateRequest flightCreateRequest) {
+	public ResponseEntity<String> createFlight(@RequestBody @Valid FlightCreateRequest flightCreateRequest) {
 
 		flightService.createFlight(flightCreateRequest);
 
