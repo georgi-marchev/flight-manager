@@ -1,8 +1,7 @@
-package dev.gmarchev.flightmanager.dto;
+package dev.gmarchev.flightmanager.dto.flight;
 
 import java.time.ZonedDateTime;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

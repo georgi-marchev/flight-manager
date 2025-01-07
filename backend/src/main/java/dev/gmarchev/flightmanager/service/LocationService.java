@@ -2,8 +2,8 @@ package dev.gmarchev.flightmanager.service;
 
 import java.util.List;
 
-import dev.gmarchev.flightmanager.dto.LocationCreateRequest;
-import dev.gmarchev.flightmanager.dto.LocationResponse;
+import dev.gmarchev.flightmanager.dto.location.LocationCreateRequest;
+import dev.gmarchev.flightmanager.dto.location.LocationResponse;
 import dev.gmarchev.flightmanager.model.Location;
 import dev.gmarchev.flightmanager.repository.LocationRepository;
 import jakarta.validation.Valid;

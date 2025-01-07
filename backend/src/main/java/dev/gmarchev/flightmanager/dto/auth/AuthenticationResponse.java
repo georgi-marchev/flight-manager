@@ -1,4 +1,4 @@
-package dev.gmarchev.flightmanager.dto;
+package dev.gmarchev.flightmanager.dto.auth;
 
 import java.util.Collection;
 

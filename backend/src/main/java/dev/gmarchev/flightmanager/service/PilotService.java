@@ -2,8 +2,8 @@ package dev.gmarchev.flightmanager.service;
 
 import java.util.List;
 
-import dev.gmarchev.flightmanager.dto.PilotCreateRequest;
-import dev.gmarchev.flightmanager.dto.PilotResponse;
+import dev.gmarchev.flightmanager.dto.pilot.PilotCreateRequest;
+import dev.gmarchev.flightmanager.dto.pilot.PilotResponse;
 import dev.gmarchev.flightmanager.model.Pilot;
 import dev.gmarchev.flightmanager.repository.PilotRepository;
 import lombok.RequiredArgsConstructor;

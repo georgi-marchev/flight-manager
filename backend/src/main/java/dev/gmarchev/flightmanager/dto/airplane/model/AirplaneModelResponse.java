@@ -1,4 +1,4 @@
-package dev.gmarchev.flightmanager.dto;
+package dev.gmarchev.flightmanager.dto.airplane.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

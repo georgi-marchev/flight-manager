@@ -1,7 +1,7 @@
 package dev.gmarchev.flightmanager.controller;
 
-import dev.gmarchev.flightmanager.dto.AuthenticationRequest;
-import dev.gmarchev.flightmanager.dto.RefreshTokenRequest;
+import dev.gmarchev.flightmanager.dto.auth.AuthenticationRequest;
+import dev.gmarchev.flightmanager.dto.auth.RefreshTokenRequest;
 import dev.gmarchev.flightmanager.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

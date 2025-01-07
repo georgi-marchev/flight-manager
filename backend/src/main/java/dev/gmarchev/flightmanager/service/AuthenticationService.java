@@ -2,9 +2,9 @@ package dev.gmarchev.flightmanager.service;
 
 import java.util.stream.Collectors;
 
-import dev.gmarchev.flightmanager.dto.AuthenticationRequest;
-import dev.gmarchev.flightmanager.dto.AuthenticationResponse;
-import dev.gmarchev.flightmanager.dto.RefreshTokenRequest;
+import dev.gmarchev.flightmanager.dto.auth.AuthenticationRequest;
+import dev.gmarchev.flightmanager.dto.auth.AuthenticationResponse;
+import dev.gmarchev.flightmanager.dto.auth.RefreshTokenRequest;
 import dev.gmarchev.flightmanager.model.Account;
 import dev.gmarchev.flightmanager.repository.AccountRepository;
 import dev.gmarchev.flightmanager.security.JwtService;

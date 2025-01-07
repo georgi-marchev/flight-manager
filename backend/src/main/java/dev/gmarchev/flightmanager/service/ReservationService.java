@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import dev.gmarchev.flightmanager.dto.PageResponse;
-import dev.gmarchev.flightmanager.dto.ReservationRequestPassenger;
-import dev.gmarchev.flightmanager.dto.ReservationPageItem;
-import dev.gmarchev.flightmanager.dto.ReservationPassengerResponse;
-import dev.gmarchev.flightmanager.dto.ReservationRequest;
-import dev.gmarchev.flightmanager.dto.ReservationResponse;
+import dev.gmarchev.flightmanager.dto.reservation.ReservationRequestPassenger;
+import dev.gmarchev.flightmanager.dto.reservation.ReservationPageItem;
+import dev.gmarchev.flightmanager.dto.reservation.ReservationPassengerResponse;
+import dev.gmarchev.flightmanager.dto.reservation.ReservationRequest;
+import dev.gmarchev.flightmanager.dto.reservation.ReservationResponse;
 import dev.gmarchev.flightmanager.exceptions.EntityNotFoundException;
 import dev.gmarchev.flightmanager.exceptions.InsufficientSeatsException;
 import dev.gmarchev.flightmanager.model.Flight;

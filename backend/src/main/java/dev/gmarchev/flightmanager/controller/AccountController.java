@@ -1,10 +1,10 @@
 package dev.gmarchev.flightmanager.controller;
 
-import dev.gmarchev.flightmanager.dto.AccountPageItem;
-import dev.gmarchev.flightmanager.dto.AccountResponse;
-import dev.gmarchev.flightmanager.dto.EmployeeUpdateRequest;
+import dev.gmarchev.flightmanager.dto.account.AccountPageItem;
+import dev.gmarchev.flightmanager.dto.account.AccountResponse;
+import dev.gmarchev.flightmanager.dto.account.EmployeeUpdateRequest;
 import dev.gmarchev.flightmanager.dto.PageResponse;
-import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
+import dev.gmarchev.flightmanager.dto.account.AccountCreateRequest;
 import dev.gmarchev.flightmanager.service.AccountService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;

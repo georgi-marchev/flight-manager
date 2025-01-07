@@ -1,15 +1,17 @@
-package dev.gmarchev.flightmanager.dto;
-
-import java.util.Set;
+package dev.gmarchev.flightmanager.dto.account;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
-public class AccountResponse {
+@Setter
+public class AccountPageItem {
 
 	private Long id;
 
@@ -20,12 +22,4 @@ public class AccountResponse {
 	private String firstName;
 
 	private String lastName;
-
-	private String personalIdentificationNumber;
-
-	private String address;
-
-	private String phoneNumber;
-
-	private Set<Long> roles;
 }

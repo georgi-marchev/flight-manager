@@ -1,4 +1,4 @@
-package dev.gmarchev.flightmanager.dto;
+package dev.gmarchev.flightmanager.dto.reservation;
 
 import dev.gmarchev.flightmanager.model.SeatType;
 import dev.gmarchev.flightmanager.validation.phonenumber.ValidNotEmptyPhoneNumber;

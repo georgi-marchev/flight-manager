@@ -48,8 +48,8 @@ Before getting started, ensure that the following tools are installed:
 1. Clone the repository:
 
    ```bash
-   git clone <your-repository-url>
-   cd <project-directory>
+   git clone https://github.com/georgi-marchev/flight-manager.git
+   cd flight-manager
    ```
 
 2. **Backend Setup** (Java + Maven)

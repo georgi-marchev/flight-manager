@@ -2,8 +2,8 @@ package dev.gmarchev.flightmanager.controller;
 
 import java.util.List;
 
-import dev.gmarchev.flightmanager.dto.LocationCreateRequest;
-import dev.gmarchev.flightmanager.dto.LocationResponse;
+import dev.gmarchev.flightmanager.dto.location.LocationCreateRequest;
+import dev.gmarchev.flightmanager.dto.location.LocationResponse;
 import dev.gmarchev.flightmanager.service.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

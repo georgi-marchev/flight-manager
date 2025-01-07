@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import dev.gmarchev.flightmanager.config.AccountMapping;
-import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
-import dev.gmarchev.flightmanager.dto.FlightCreateRequest;
+import dev.gmarchev.flightmanager.dto.account.AccountCreateRequest;
+import dev.gmarchev.flightmanager.dto.flight.FlightCreateRequest;
 import dev.gmarchev.flightmanager.model.Airplane;
 import dev.gmarchev.flightmanager.model.AirplaneModel;
 import dev.gmarchev.flightmanager.model.Location;

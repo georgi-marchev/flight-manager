@@ -2,15 +2,14 @@ package dev.gmarchev.flightmanager.controller;
 
 import java.time.LocalDate;
 
-import dev.gmarchev.flightmanager.dto.FlightCreateRequest;
-import dev.gmarchev.flightmanager.dto.FlightPageItem;
-import dev.gmarchev.flightmanager.dto.FlightPassengerPageItem;
-import dev.gmarchev.flightmanager.dto.FlightResponse;
-import dev.gmarchev.flightmanager.dto.FlightUpdateRequest;
+import dev.gmarchev.flightmanager.dto.flight.FlightCreateRequest;
+import dev.gmarchev.flightmanager.dto.flight.FlightPageItem;
+import dev.gmarchev.flightmanager.dto.flight.FlightPassengerPageItem;
+import dev.gmarchev.flightmanager.dto.flight.FlightResponse;
+import dev.gmarchev.flightmanager.dto.flight.FlightUpdateRequest;
 import dev.gmarchev.flightmanager.dto.PageResponse;
 import dev.gmarchev.flightmanager.service.FlightService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

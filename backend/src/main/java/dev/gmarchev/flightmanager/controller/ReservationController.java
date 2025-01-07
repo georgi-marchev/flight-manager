@@ -1,9 +1,9 @@
 package dev.gmarchev.flightmanager.controller;
 
 import dev.gmarchev.flightmanager.dto.PageResponse;
-import dev.gmarchev.flightmanager.dto.ReservationPageItem;
-import dev.gmarchev.flightmanager.dto.ReservationRequest;
-import dev.gmarchev.flightmanager.dto.ReservationResponse;
+import dev.gmarchev.flightmanager.dto.reservation.ReservationPageItem;
+import dev.gmarchev.flightmanager.dto.reservation.ReservationRequest;
+import dev.gmarchev.flightmanager.dto.reservation.ReservationResponse;
 import dev.gmarchev.flightmanager.service.ReservationService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;

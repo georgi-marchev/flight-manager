@@ -1,15 +1,14 @@
 package dev.gmarchev.flightmanager.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import dev.gmarchev.flightmanager.dto.AccountPageItem;
-import dev.gmarchev.flightmanager.dto.AccountResponse;
-import dev.gmarchev.flightmanager.dto.EmployeeUpdateRequest;
+import dev.gmarchev.flightmanager.dto.account.AccountPageItem;
+import dev.gmarchev.flightmanager.dto.account.AccountResponse;
+import dev.gmarchev.flightmanager.dto.account.EmployeeUpdateRequest;
 import dev.gmarchev.flightmanager.dto.PageResponse;
-import dev.gmarchev.flightmanager.dto.AccountCreateRequest;
+import dev.gmarchev.flightmanager.dto.account.AccountCreateRequest;
 import dev.gmarchev.flightmanager.exceptions.EntityNotFoundException;
 import dev.gmarchev.flightmanager.model.Account;
 import dev.gmarchev.flightmanager.model.Role;

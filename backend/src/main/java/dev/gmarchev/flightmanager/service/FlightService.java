@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import dev.gmarchev.flightmanager.dto.FlightCreateRequest;
-import dev.gmarchev.flightmanager.dto.FlightPageItem;
-import dev.gmarchev.flightmanager.dto.FlightPassengerPageItem;
-import dev.gmarchev.flightmanager.dto.FlightResponse;
-import dev.gmarchev.flightmanager.dto.FlightUpdateRequest;
+import dev.gmarchev.flightmanager.dto.flight.FlightCreateRequest;
+import dev.gmarchev.flightmanager.dto.flight.FlightPageItem;
+import dev.gmarchev.flightmanager.dto.flight.FlightPassengerPageItem;
+import dev.gmarchev.flightmanager.dto.flight.FlightResponse;
+import dev.gmarchev.flightmanager.dto.flight.FlightUpdateRequest;
 import dev.gmarchev.flightmanager.dto.PageResponse;
 import dev.gmarchev.flightmanager.exceptions.EntityNotFoundException;
 import dev.gmarchev.flightmanager.exceptions.IvnalidFlightException;

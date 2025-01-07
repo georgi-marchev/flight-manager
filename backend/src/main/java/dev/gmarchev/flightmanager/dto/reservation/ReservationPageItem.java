@@ -1,4 +1,4 @@
-package dev.gmarchev.flightmanager.dto;
+package dev.gmarchev.flightmanager.dto.reservation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

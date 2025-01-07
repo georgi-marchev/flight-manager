@@ -1,4 +1,4 @@
-package dev.gmarchev.flightmanager.dto;
+package dev.gmarchev.flightmanager.dto.pilot;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

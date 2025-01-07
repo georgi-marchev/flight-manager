@@ -2,7 +2,7 @@ package dev.gmarchev.flightmanager.controller;
 
 import java.util.List;
 
-import dev.gmarchev.flightmanager.dto.AirplaneModelResponse;
+import dev.gmarchev.flightmanager.dto.airplane.model.AirplaneModelResponse;
 import dev.gmarchev.flightmanager.service.AirplaneModelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
