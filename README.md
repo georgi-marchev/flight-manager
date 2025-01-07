@@ -139,5 +139,6 @@ The API documentation is located in the [API README.md](./docs/api/README.md) fi
 
 The following diagrams are included in the project to visualize the system architecture and database structure:
 
-[Software Architecture Diagram](./docs/diagrams/software_architecture_diagram.svg): it outlines the overall architecture of the application, including interactions between the frontend, backend, and external services.
-[Database ER Diagram](./docs/diagrams/software_architecture_diagram.svg): Located in docs/diagrams/database_er_diagram.svg, this diagram illustrates the entity relationships for the database.
+[Software Architecture Diagram](./docs/diagrams/software_architecture_diagram.png): it outlines the overall architecture of the application, including interactions between the frontend, backend, and external services.
+
+[Database ER Diagram](./docs/diagrams/database_er_diagram.png): Located in docs/diagrams/database_er_diagram.svg, this diagram illustrates the entity relationships for the database.
